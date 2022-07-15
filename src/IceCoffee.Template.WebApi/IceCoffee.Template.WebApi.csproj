@@ -11,11 +11,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="IceCoffee.AspNetCore" Version="1.0.2.3" />
 	  <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="6.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\IceCoffee.AspNetCore\IceCoffee.AspNetCore\IceCoffee.AspNetCore.csproj" GeneratePathProperty="true" />
 		<ProjectReference Include="..\IceCoffee.Template.Data\IceCoffee.Template.Data.csproj" />
 	</ItemGroup>
 	
