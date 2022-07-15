@@ -21,7 +21,5 @@
         public bool IsExternalLink { get; set; }
 
         public string? Description { get; set; }
-
-        public Guid Fk_AppId { get; set; }
     }
 }

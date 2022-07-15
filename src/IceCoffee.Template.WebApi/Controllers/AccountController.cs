@@ -18,7 +18,7 @@ namespace IceCoffee.Template.WebApi.Controllers
         [HttpPut]
         public async Task<Response> ChangePassword([FromBody] ChangePasswordModel model)
         {
-            var userId = HttpContext.GetUserInfo().UserId;
+            var userId = UserInfo.UserId;
             var userRepository = HttpContext.RequestServices.GetRequiredService<IUserRepository>();
             var refreshTokenRepository = HttpContext.RequestServices.GetRequiredService<IRefreshTokenRepository>();
 

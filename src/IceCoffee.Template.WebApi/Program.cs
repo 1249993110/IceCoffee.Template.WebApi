@@ -8,6 +8,7 @@ global using IceCoffee.Template.Data.IRepositories;
 global using IceCoffee.Common.Extensions;
 global using IceCoffee.AspNetCore.Extensions;
 global using System.ComponentModel.DataAnnotations;
+global using IceCoffee.Template.Data.Entities;
 using IceCoffee.AspNetCore.Authentication;
 using IceCoffee.AspNetCore.Authorization;
 using IceCoffee.AspNetCore.Middlewares;
@@ -249,7 +250,7 @@ namespace IceCoffee.Template.WebApi
                 };
             }).AddApiKeyAuthentication(options => options.AccessToken = accessToken);
 
-            // 添加授权处理器（默认添加微信和PC），这里不能使用 TryAdd，否则只会添加一个 IAuthorizationHandler
+            // 添加授权处理器（默认添加微信和PC）, 这里不能使用 TryAdd, 否则只会添加一个 IAuthorizationHandler
             services.TryAddEnumerable(ServiceDescriptor.Singleton<IAuthorizationHandler, AuthorizationHandler>());
 
             var permissionRequirement = new PermissionRequirement()
@@ -262,10 +263,10 @@ namespace IceCoffee.Template.WebApi
             services.AddAuthorization(options =>
             {
                 // https://blog.csdn.net/sD7O95O/article/details/105382881
-                // InvokeHandlersAfterFailure 为 true 的情况下（默认为 true ），所有注册了的 AuthorizationHandler 都会被执行
+                // InvokeHandlersAfterFailure 为 true 的情况下（默认为 true ）, 所有注册了的 AuthorizationHandler 都会被执行
                 options.InvokeHandlersAfterFailure = false;
 
-                // 如果资源具有任何 IAuthorizeData 实例，则将对它们进行评估，而不是回退策略
+                // 如果资源具有任何 IAuthorizeData 实例, 则将对它们进行评估, 而不是回退策略
                 options.FallbackPolicy = new AuthorizationPolicyBuilder(
                     JwtBearerDefaults.AuthenticationScheme,
                     CookieAuthenticationDefaults.AuthenticationScheme,
@@ -282,7 +283,7 @@ namespace IceCoffee.Template.WebApi
             bool enableSwagger = config.GetSection("EnableSwagger").Get<bool>();
             if (enableSwagger)
             {
-                // 根据服务的ServiceType和ImplementationType进行判断，如果已存在对应的服务则不添加，适用于为同一个服务添加多个不同的实现的场景
+                // 根据服务的ServiceType和ImplementationType进行判断, 如果已存在对应的服务则不添加, 适用于为同一个服务添加多个不同的实现的场景
                 // 注册响应状态码及类型提供者
                 services.TryAddEnumerable(ServiceDescriptor.Singleton<IApplicationModelProvider, ResponseTypeModelProvider>());
 
@@ -308,7 +309,7 @@ namespace IceCoffee.Template.WebApi
                         };
                     };
 
-                    // 可以设置从注释文件加载，但是加载的内容可被 OpenApiTagAttribute 特性覆盖
+                    // 可以设置从注释文件加载, 但是加载的内容可被 OpenApiTagAttribute 特性覆盖
                     config.UseControllerSummaryAsTagDescription = true;
 
                     config.AddSecurity("ApiKey", new OpenApiSecurityScheme()
@@ -343,7 +344,7 @@ namespace IceCoffee.Template.WebApi
 
                 // 在 ForwardedHeadersMiddleware 中间件代码第268行 CheckKnownAddress 方法
                 // 会检查访问的IP是否在 ForwardedHeadersOptions.KnownProxies 或者 ForwardedHeadersOptions.KnownNetworks 之中
-                // 通过清空 KnownNetworks 和 KnownProxies 的默认值来不执行严格匹配，这样做有可能受到 IP欺骗 攻击
+                // 通过清空 KnownNetworks 和 KnownProxies 的默认值来不执行严格匹配, 这样做有可能受到 IP欺骗 攻击
                 options.KnownNetworks.Clear();
                 options.KnownProxies.Clear();
             });

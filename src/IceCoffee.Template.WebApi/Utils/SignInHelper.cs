@@ -29,14 +29,14 @@ namespace IceCoffee.Template.WebApi.Utils
             // 检查登录允许
             if (user.LoginEnabled == false)
             {
-                throw new Exception("不允许登录，请联系系统管理员");
+                throw new Exception("不允许登录, 请联系系统管理员");
             }
 
             DateTime now = DateTime.Now;
             // 检查登录锁定
             if (user.LockoutEndDate.HasValue && user.LockoutEndDate.Value > now)
             {
-                throw new Exception("登录锁定，请稍后重试");
+                throw new Exception("登录锁定, 请稍后重试");
             }
 
             // 检查密码
@@ -46,7 +46,7 @@ namespace IceCoffee.Template.WebApi.Utils
                 if (user.AccessFailedCount > 3)
                 {
                     await _userRepository.UpdateColumnByIdAsync("id", user.Id, "lockout_end_date", now.AddMinutes(10));
-                    throw new Exception("您的账户已被锁定，请稍后重试");
+                    throw new Exception("您的账户已被锁定, 请稍后重试");
                 }
 
                 await _userRepository.UpdateColumnByIdAsync("id", user.Id, "access_failed_count", user.AccessFailedCount);
