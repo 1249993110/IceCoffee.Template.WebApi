@@ -42,7 +42,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         [HttpGet]
         public async Task<Response<PaginationQueryResult<T_Role>>> Get([FromQuery] PaginationQueryModel models)
         {
-            var dto = await _roleRepository.QueryPagedAsync(models.Adapt<PaginationQueryDto>(), nameof(T_Role.Name));
+            var dto = await _roleRepository.QueryPagedAsync(models.Adapt<PaginationQueryDto>(), "name");
             return PaginationQueryResult(dto.Adapt<PaginationQueryResult<T_Role>>());
         }
 
