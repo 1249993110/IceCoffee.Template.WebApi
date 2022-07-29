@@ -47,7 +47,6 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
 
             if (roleIds.Length > 0)
             {
-                UnitOfWork.Default.EnterContext();
                 var entities = new List<T_UserRole>();
                 foreach (var roleId in roleIds)
                 {
@@ -58,6 +57,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
                     });
                 }
 
+                UnitOfWork.Default.EnterContext();
                 try
                 {
                     _userRoleRepository.DeleteById("id", userId);
