@@ -7,13 +7,13 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
     /// </summary>
     [Area(nameof(SystemManagement))]
     [Route("api/[area]/[controller]")]
-    public class RoleMenuController : ApiControllerBase
+    public class RoleMenusController : ApiControllerBase
     {
         private readonly IRoleMenuRepository _roleMenuRepository;
         private readonly IRoleRepository _roleRepository;
         private readonly IMenuRepository _menuRepository;
 
-        public RoleMenuController(
+        public RoleMenusController(
             IRoleMenuRepository roleMenuRepository,
             IRoleRepository roleRepository,
             IMenuRepository menuRepository)

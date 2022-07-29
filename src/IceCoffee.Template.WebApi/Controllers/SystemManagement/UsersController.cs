@@ -1,5 +1,4 @@
 ﻿using IceCoffee.Common.Security.Cryptography;
-using IceCoffee.DbCore.Dtos;
 using Mapster;
 
 namespace HYCX.Power.WebApi.Controllers.SystemManagement

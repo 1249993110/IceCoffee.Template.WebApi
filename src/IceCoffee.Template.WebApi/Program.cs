@@ -1,14 +1,3 @@
-global using IceCoffee.AspNetCore;
-global using IceCoffee.AspNetCore.Controllers;
-global using IceCoffee.AspNetCore.Models;
-global using IceCoffee.Template.WebApi.Models;
-global using Microsoft.AspNetCore.Authorization;
-global using Microsoft.AspNetCore.Mvc;
-global using IceCoffee.Template.Data.IRepositories;
-global using IceCoffee.Common.Extensions;
-global using IceCoffee.AspNetCore.Extensions;
-global using System.ComponentModel.DataAnnotations;
-global using IceCoffee.Template.Data.Entities;
 using IceCoffee.AspNetCore.Authentication;
 using IceCoffee.AspNetCore.Authorization;
 using IceCoffee.AspNetCore.Middlewares;
@@ -25,7 +14,6 @@ using NSwag;
 using Serilog;
 
 [assembly: ApiController]
-
 namespace IceCoffee.Template.WebApi
 {
     public static class Program
@@ -129,7 +117,7 @@ namespace IceCoffee.Template.WebApi
                 endpoints.MapControllers();
             });
         }
-
+       
         /// <summary>
         /// ×¢²á·þÎñ
         /// </summary>
@@ -185,7 +173,7 @@ namespace IceCoffee.Template.WebApi
             {
                 options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
                 options.JsonSerializerOptions.Converters.Add(new DateTimeNullableConverter());
-                // options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                // options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); // [JsonConverter(typeof(JsonStringEnumConverter))]
             });
 
             #endregion ×¢²á¿ØÖÆÆ÷

@@ -26,7 +26,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         [HttpGet("{userId}")]
         public async Task<Response<IEnumerable<Guid>>> Get([FromRoute] Guid userId)
         {
-            var entities = await _userRoleRepository.QueryByIdAsync("id", userId);
+            var entities = await _userRoleRepository.QueryByIdAsync("fk_user_id", userId);
             return SucceededResult(entities.Select(s => s.RoleId));
         }
 

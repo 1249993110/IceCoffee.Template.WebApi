@@ -1,0 +1,12 @@
+﻿global using IceCoffee.AspNetCore;
+global using IceCoffee.AspNetCore.Controllers;
+global using IceCoffee.AspNetCore.Models;
+global using IceCoffee.Template.WebApi.Models;
+global using Microsoft.AspNetCore.Authorization;
+global using Microsoft.AspNetCore.Mvc;
+global using IceCoffee.Template.Data.IRepositories;
+global using IceCoffee.Common.Extensions;
+global using IceCoffee.AspNetCore.Extensions;
+global using System.ComponentModel.DataAnnotations;
+global using IceCoffee.Template.Data.Entities;
+global using IceCoffee.DbCore.Dtos;

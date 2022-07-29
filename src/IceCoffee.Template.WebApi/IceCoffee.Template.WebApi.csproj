@@ -11,20 +11,17 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="IceCoffee.AspNetCore" Version="1.0.2.3" />
+	  <PackageReference Include="IceCoffee.AspNetCore" Version="1.0.2.3" GeneratePathProperty="true" />
 	  <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="6.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\IceCoffee.Template.Data\IceCoffee.Template.Data.csproj" />
 	</ItemGroup>
-	
-	<!--<Target Name="CopyXMLFromPackagesOnBuild" AfterTargets="Build">
-		<Copy SourceFiles="$(PkgIceCoffee_AspNetCore)\lib\net6.0\IceCoffee.AspNetCore.xml" DestinationFolder="$(OutDir)" />
-	</Target>
-	<Target Name="CopyXMLFromPackagesOnPublish" AfterTargets="Publish">
-		<Copy SourceFiles="$(PkgIceCoffee_AspNetCore)\lib\net6.0\IceCoffee.AspNetCore.xml" DestinationFolder="$(PublishDir)" />
-	</Target>-->
+
+	<ItemGroup>
+		<None Include="$(PkgIceCoffee_AspNetCore)\lib\$(TargetFramework)\IceCoffee.AspNetCore.xml" Visible="false" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
 	
 	<ItemGroup>
 	  <Folder Include="wwwroot\" />

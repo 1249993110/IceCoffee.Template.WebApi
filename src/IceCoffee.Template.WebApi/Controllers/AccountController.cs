@@ -11,6 +11,16 @@ namespace IceCoffee.Template.WebApi.Controllers
     public class AccountController : AccountControllerBase
     {
         /// <summary>
+        /// 用户信息
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public new Response<UserInfo> UserInfo()
+        {
+            return SucceededResult(base.UserInfo);
+        }
+
+        /// <summary>
         /// 修改密码
         /// </summary>
         /// <param name="model"></param>
@@ -18,7 +28,7 @@ namespace IceCoffee.Template.WebApi.Controllers
         [HttpPut]
         public async Task<Response> ChangePassword([FromBody] ChangePasswordModel model)
         {
-            var userId = UserInfo.UserId;
+            var userId = base.UserInfo.UserId;
             var userRepository = HttpContext.RequestServices.GetRequiredService<IUserRepository>();
             var refreshTokenRepository = HttpContext.RequestServices.GetRequiredService<IRefreshTokenRepository>();
 
@@ -91,7 +101,7 @@ namespace IceCoffee.Template.WebApi.Controllers
                 var userInfo = await SignInHelper.GetUserInfo(HttpContext, model.LoginName, model.PasswordHash);
 
                 await base.SignInWithCookie(userInfo);
-                return SucceededResult();
+                return SucceededResult(userInfo);
             }
             catch (Exception ex)
             {

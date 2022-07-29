@@ -15,12 +15,12 @@ namespace IceCoffee.Template.WebApi.Utils
         public static async Task<UserInfo> GetUserInfo(HttpContext httpContext, string loginName, string passwordHash)
         {
             string password = StringExtension.FormBase64(passwordHash);
-            var _userRepository = httpContext.RequestServices.GetRequiredService<IUserRepository>();
-            var _vUserRoleRepository = httpContext.RequestServices.GetRequiredService<IVUserRoleRepository>();
-            var _vRolePermissionRepository = httpContext.RequestServices.GetRequiredService<IVRolePermissionRepository>();
+            var userRepository = httpContext.RequestServices.GetRequiredService<IUserRepository>();
+            var vUserRoleRepository = httpContext.RequestServices.GetRequiredService<IVUserRoleRepository>();
+            var vRolePermissionRepository = httpContext.RequestServices.GetRequiredService<IVRolePermissionRepository>();
 
             // 判断用户是否存在
-            var user = await _userRepository.QueryByLoginNameAsync(loginName);
+            var user = await userRepository.QueryByLoginNameAsync(loginName);
             if (user == null)
             {
                 throw new Exception("用户不存在");
@@ -45,24 +45,24 @@ namespace IceCoffee.Template.WebApi.Utils
                 ++user.AccessFailedCount;
                 if (user.AccessFailedCount > 3)
                 {
-                    await _userRepository.UpdateColumnByIdAsync("id", user.Id, "lockout_end_date", now.AddMinutes(10));
+                    await userRepository.UpdateColumnByIdAsync("id", user.Id, "lockout_end_date", now.AddMinutes(10));
                     throw new Exception("您的账户已被锁定, 请稍后重试");
                 }
 
-                await _userRepository.UpdateColumnByIdAsync("id", user.Id, "access_failed_count", user.AccessFailedCount);
+                await userRepository.UpdateColumnByIdAsync("id", user.Id, "access_failed_count", user.AccessFailedCount);
                 throw new Exception("密码错误");
             }
 
             user.AccessFailedCount = 0;
             user.LastLoginTime = now;
             user.LastLoginIp = httpContext.GetRemoteIpAddress();
-            await _userRepository.UpdateAsync(user);
+            await userRepository.UpdateAsync(user);
 
-            var vUserRoles = await _vUserRoleRepository.QueryByIdAsync("id", user.Id);
+            var vUserRoles = await vUserRoleRepository.QueryByIdAsync("user_id", user.Id);
             var roleIds = vUserRoles.Select(s => s.RoleId);
             var roleNames = vUserRoles.Select(s => s.RoleName);
 
-            var vRolePermission = await _vRolePermissionRepository.QueryByIdsAsync("role_id", roleIds);
+            var vRolePermission = await vRolePermissionRepository.QueryByIdsAsync("role_id", roleIds);
             var areas = vRolePermission.Select(s => s.Area);
             var httpMethods = vRolePermission.Select(s => s.HttpMethods);
 

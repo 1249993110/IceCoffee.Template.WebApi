@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IceCoffee.Template.WebApi",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IceCoffee.Template.Data", "src\IceCoffee.Template.Data\IceCoffee.Template.Data.csproj", "{54F351AA-6CA9-4AE0-AC37-06D860A2604B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{17B3A643-544E-43FA-8AC7-F9CF2B3BB2BD}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

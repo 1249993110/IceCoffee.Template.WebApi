@@ -16,7 +16,7 @@
         /// <summary>
         /// 
         /// </summary>
-        [Column("created_date")]
+        [Column("created_date"), IgnoreInsert, IgnoreUpdate]
         public DateTime CreatedDate { get; set; }
 
         /// <summary>

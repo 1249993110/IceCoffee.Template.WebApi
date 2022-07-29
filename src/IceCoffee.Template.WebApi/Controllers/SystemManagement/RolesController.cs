@@ -1,5 +1,4 @@
-﻿using IceCoffee.DbCore.Dtos;
-using Mapster;
+﻿using Mapster;
 
 namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
 {

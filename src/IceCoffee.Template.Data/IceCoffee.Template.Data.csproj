@@ -9,7 +9,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="IceCoffee.DbCore" Version="1.0.4.5" />
+	  <PackageReference Include="IceCoffee.DbCore" Version="1.0.5.2" />
 	</ItemGroup>
 
 </Project>
