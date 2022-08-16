@@ -11,7 +11,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="IceCoffee.AspNetCore" Version="1.0.2.3" GeneratePathProperty="true" />
+	  <!--<PackageReference Include="IceCoffee.AspNetCore" Version="1.0.2.3" GeneratePathProperty="true" />-->
+	  <PackageReference Include="IceCoffee.AspNetCore" Version="1.0.3" GeneratePathProperty="true" />
 	  <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="6.0.0" />
 	</ItemGroup>
 
@@ -19,9 +20,9 @@
 		<ProjectReference Include="..\IceCoffee.Template.Data\IceCoffee.Template.Data.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
+	<!--<ItemGroup>
 		<None Include="$(PkgIceCoffee_AspNetCore)\lib\$(TargetFramework)\IceCoffee.AspNetCore.xml" Visible="false" CopyToOutputDirectory="PreserveNewest" />
-	</ItemGroup>
+	</ItemGroup>-->
 	
 	<ItemGroup>
 	  <Folder Include="wwwroot\" />

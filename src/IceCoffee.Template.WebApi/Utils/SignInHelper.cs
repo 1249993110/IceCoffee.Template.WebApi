@@ -62,20 +62,18 @@ namespace IceCoffee.Template.WebApi.Utils
             var roleIds = vUserRoles.Select(s => s.RoleId);
             var roleNames = vUserRoles.Select(s => s.RoleName);
 
-            var vRolePermission = await vRolePermissionRepository.QueryByIdsAsync("role_id", roleIds);
-            var areas = vRolePermission.Select(s => s.Area);
-            var httpMethods = vRolePermission.Select(s => s.HttpMethods);
+            var vRolePermission = (await vRolePermissionRepository.QueryByIdsAsync("role_id", roleIds));
+            var areas = vRolePermission.Select(s => s.Area).Distinct();
 
             return new UserInfo()
             {
                 UserId = user.Id,
-                RoleNames = roleNames.ToArray(),
+                RoleNames = roleNames,
                 DisplayName = user.DisplayName,
                 Email = user.Email,
                 UserName = user.Name,
                 PhoneNumber = user.PhoneNumber,
-                Areas = areas.ToArray(),
-                HttpMethods = httpMethods.ToArray()
+                Areas = areas
             };
         }
     }

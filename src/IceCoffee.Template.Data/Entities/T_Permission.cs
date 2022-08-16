@@ -46,12 +46,6 @@
         /// <summary>
         /// 
         /// </summary>
-        [Column("http_methods")]
-        public string HttpMethods { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
         [Column("description")]
         public string Description { get; set; }
 

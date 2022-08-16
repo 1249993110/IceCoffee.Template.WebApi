@@ -17,6 +17,7 @@ namespace IceCoffee.Template.WebApi.Controllers
         [HttpGet]
         public new Response<UserInfo> UserInfo()
         {
+            
             return SucceededResult(base.UserInfo);
         }
 

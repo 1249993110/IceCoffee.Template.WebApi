@@ -11,11 +11,6 @@
         /// 
         /// </summary>
         public string? Description { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string? HttpMethods { get; set; }
     }
 
     public class PermissionEditModel : PermissionAddModel

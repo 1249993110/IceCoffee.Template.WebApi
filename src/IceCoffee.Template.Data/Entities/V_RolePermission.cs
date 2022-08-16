@@ -30,11 +30,5 @@
         [Column("area")]
         public string Area { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        [Column("http_methods")]
-        public string HttpMethods { get; set; }
-
     }
 }

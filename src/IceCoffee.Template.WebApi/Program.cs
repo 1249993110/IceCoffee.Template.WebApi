@@ -163,7 +163,7 @@ namespace IceCoffee.Template.WebApi
                         Error = new Error()
                         {
                             Message = "One or more model validation errors occurred",
-                            Details = context.ModelState.Values.SelectMany(s => s.Errors).Select(s => s.ErrorMessage).ToArray()
+                            Details = context.ModelState.Values.SelectMany(s => s.Errors).Select(s => s.ErrorMessage)
                         }
                     };
 
@@ -217,15 +217,17 @@ namespace IceCoffee.Template.WebApi
             services.AddUserInfo();
 
             string accessToken = config.GetSection("AccessToken").Get<string>();
+            string cookieName = ".AspNetCore.Authentication." + builder.Environment.ApplicationName;
+
             services
                 .AddJwtAuthentication(config.GetSection(nameof(JwtOptions)))
                 .AddCookie(options =>
             {
-                options.Cookie.Name = ".AspNetCore.Authentication." + builder.Environment.ApplicationName;   // Cookie名
-                options.Cookie.HttpOnly = true;                             // 指示客户端脚本是否可以访问cookie。
-                options.Cookie.IsEssential = true;
-                options.ExpireTimeSpan = TimeSpan.FromDays(7);              // Cookie身份验证到期时间（在服务端验证）
-                options.SlidingExpiration = true;                           // 滑动过期
+                options.Cookie.Name = cookieName;                   // Cookie名
+                options.Cookie.HttpOnly = true;                     // 指示客户端脚本是否可以访问cookie。
+                options.Cookie.IsEssential = true;                  // 指示此 Cookie 是否对应用程序正常运行至关重要, 如果为 true, 则可以绕过同意策略检查, 默认值为 false
+                options.ExpireTimeSpan = TimeSpan.FromDays(7);      // Cookie身份验证到期时间（在服务端验证）
+                options.SlidingExpiration = true;                   // 滑动过期
                 options.Events.OnRedirectToLogin = (context) =>
                 {
                     context.Response.StatusCode = StatusCodes.Status401Unauthorized;
@@ -238,32 +240,7 @@ namespace IceCoffee.Template.WebApi
                 };
             }).AddApiKeyAuthentication(options => options.AccessToken = accessToken);
 
-            // 添加授权处理器（默认添加微信和PC）, 这里不能使用 TryAdd, 否则只会添加一个 IAuthorizationHandler
-            services.TryAddEnumerable(ServiceDescriptor.Singleton<IAuthorizationHandler, AuthorizationHandler>());
-
-            var permissionRequirement = new PermissionRequirement()
-            {
-                RequireHttpMethods = true
-            };
-            services.AddSingleton(permissionRequirement);
-
-            // 添加 JWT 与 Cookie 的混合授权策略服务
-            services.AddAuthorization(options =>
-            {
-                // https://blog.csdn.net/sD7O95O/article/details/105382881
-                // InvokeHandlersAfterFailure 为 true 的情况下（默认为 true ）, 所有注册了的 AuthorizationHandler 都会被执行
-                options.InvokeHandlersAfterFailure = false;
-
-                // 如果资源具有任何 IAuthorizeData 实例, 则将对它们进行评估, 而不是回退策略
-                options.FallbackPolicy = new AuthorizationPolicyBuilder(
-                    JwtBearerDefaults.AuthenticationScheme,
-                    CookieAuthenticationDefaults.AuthenticationScheme,
-                    AuthenticationSchemes.ApiKeyAuthenticationSchemeName)
-                    .RequireAuthenticatedUser()
-                    .AddRequirements(permissionRequirement)
-                    .Build();
-            });
-
+            services.AddAreaAuthorization();
             #endregion 认证&授权
 
             #region Swagger文档
