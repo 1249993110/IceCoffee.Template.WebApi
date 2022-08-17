@@ -5,7 +5,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Guid? ParentId { get; set; }
+        public string? ParentId { get; set; }
 
         /// <summary>
         /// 
@@ -51,6 +51,6 @@
         /// 
         /// </summary>
         [Required]
-        public Guid Id { get; set; }
+        public string? Id { get; set; }
     }
 }

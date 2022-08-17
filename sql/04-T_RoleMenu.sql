@@ -1,0 +1,10 @@
+PRAGMA FOREIGN_KEYS = ON;					--启用外键
+
+--角色菜单表
+CREATE TABLE IF NOT EXISTS T_RoleMenu(	
+	Fk_RoleId TEXT NOT NULL,				--角色Id
+	Fk_MenuId TEXT NOT NULL,				--菜单Id
+	PRIMARY KEY(Fk_RoleId,Fk_MenuId),
+	FOREIGN KEY (Fk_RoleId) REFERENCES T_Role(Id) ON DELETE CASCADE,
+	FOREIGN KEY (Fk_MenuId) REFERENCES T_Menu(Id) ON DELETE CASCADE
+);

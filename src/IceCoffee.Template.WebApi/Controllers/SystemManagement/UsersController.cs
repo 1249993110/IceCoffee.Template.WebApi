@@ -23,7 +23,7 @@ namespace HYCX.Power.WebApi.Controllers.SystemManagement
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet("{userId}")]
-        public async Task<Response<UserModel>> Get([FromRoute] Guid userId)
+        public async Task<Response<UserModel>> Get([FromRoute] string userId)
         {
             var entity = (await _userRepository.QueryByIdAsync("id", userId)).FirstOrDefault();
             if (entity == null)
@@ -61,7 +61,7 @@ namespace HYCX.Power.WebApi.Controllers.SystemManagement
             }
 
             var entity = model.Adapt<T_User>();
-            entity.Id = Guid.NewGuid();
+            entity.Id = Guid.NewGuid().ToString();
 
             string password = StringExtension.FormBase64(model.PasswordHash);
             PBKDF2.HashPassword(password, out string passwordHash, out string passwordSalt);
@@ -112,7 +112,7 @@ namespace HYCX.Power.WebApi.Controllers.SystemManagement
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpDelete("{userId}")]
-        public async Task<Response> Delete([FromRoute] Guid userId)
+        public async Task<Response> Delete([FromRoute] string userId)
         {
             int count = await _userRepository.DeleteByIdAsync("id", userId);
             if (count != 1)
@@ -129,7 +129,7 @@ namespace HYCX.Power.WebApi.Controllers.SystemManagement
         /// <param name="userIds"></param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<Response> Delete([FromBody, Required, MinLength(1)] Guid[] userIds)
+        public async Task<Response> Delete([FromBody, Required, MinLength(1)] string[] userIds)
         {
             await _userRepository.DeleteBatchByIdsAsync("id", userIds, true);
             return SucceededResult();

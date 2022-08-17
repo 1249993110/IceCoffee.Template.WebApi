@@ -17,7 +17,6 @@ namespace IceCoffee.Template.WebApi.Controllers
         [HttpGet]
         public new Response<UserInfo> UserInfo()
         {
-            
             return SucceededResult(base.UserInfo);
         }
 
@@ -156,7 +155,7 @@ namespace IceCoffee.Template.WebApi.Controllers
         [HttpGet]
         public async Task<Response<IEnumerable<MenuTreeModel>>> UserMenus()
         {
-            Guid? userId = HttpContext.RequestServices.GetRequiredService<UserInfo>().UserId;
+            var userId = HttpContext.RequestServices.GetRequiredService<UserInfo>().UserId;
             var menuRepository = HttpContext.RequestServices.GetRequiredService<IMenuRepository>();
             var vUserRoleRepository = HttpContext.RequestServices.GetRequiredService<IVUserRoleRepository>();
             var roleMenuRepository = HttpContext.RequestServices.GetRequiredService<IRoleMenuRepository>();
@@ -169,14 +168,11 @@ namespace IceCoffee.Template.WebApi.Controllers
                 return FailedResult("获取失败");
             }
 
-            var hashSet = new HashSet<Guid>();
+            var hashSet = new HashSet<string>();
 
             foreach (var role in userRoles)
             {
-                if (role.RoleId.HasValue)
-                {
-                    hashSet.Add(role.RoleId.Value);
-                }
+                hashSet.Add(role.RoleId);
             }
 
             // 第2步：根据角色Id找到菜单Id

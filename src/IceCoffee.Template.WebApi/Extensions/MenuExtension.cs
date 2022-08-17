@@ -13,7 +13,7 @@ namespace IceCoffee.Template.WebApi.Extensions
         {
             var lstTreeNodes = new List<MenuTreeModel>();
 
-            var parentMenus = menus.Where(t => t.ParentId.HasValue == false).OrderBy(m => m.Sort);
+            var parentMenus = menus.Where(t => t.ParentId == null).OrderBy(m => m.Sort);
             foreach (var item in parentMenus)
             {
                 var node = ParseTreeNode(menus, item);

@@ -3,7 +3,7 @@ using IceCoffee.Template.Data.IRepositories;
 
 namespace IceCoffee.Template.Data.Repositories
 {
-    public class VRolePermissionRepository : PostgreSqlRepository<V_RolePermission>, IVRolePermissionRepository
+    public class VRolePermissionRepository : SQLiteRepository<V_RolePermission>, IVRolePermissionRepository
     {
         public VRolePermissionRepository(DefaultDbConnectionInfo dbConnectionInfo) : base(dbConnectionInfo)
         {

@@ -3,22 +3,21 @@
     /// <summary>
     /// 
     /// </summary>
-    [Table("t_role_menu")]
     public class T_RoleMenu
     {
         /// <summary>
         /// 
         /// </summary>
         [PrimaryKey]
-        [Column("fk_role_id")]
-        public Guid RoleId { get; set; }
+        [Column("Fk_RoleId")]
+        public string RoleId { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
         [PrimaryKey]
-        [Column("fk_menu_id")]
-        public Guid MenuId { get; set; }
+        [Column("Fk_MenuId")]
+        public string MenuId { get; set; }
 
     }
 }

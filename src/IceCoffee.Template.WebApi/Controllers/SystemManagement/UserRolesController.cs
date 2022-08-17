@@ -24,7 +24,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet("{userId}")]
-        public async Task<Response<IEnumerable<Guid>>> Get([FromRoute] Guid userId)
+        public async Task<Response<IEnumerable<string>>> Get([FromRoute] string userId)
         {
             var entities = await _userRoleRepository.QueryByIdAsync("fk_user_id", userId);
             return SucceededResult(entities.Select(s => s.RoleId));
@@ -37,7 +37,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         /// <param name="roleIds"></param>
         /// <returns></returns>
         [HttpPut("{userId}")]
-        public async Task<Response> Put([FromRoute] Guid userId, [FromBody, Required] Guid[] roleIds)
+        public async Task<Response> Put([FromRoute] string userId, [FromBody, Required] string[] roleIds)
         {
             int count = await _userRepository.QueryRecordCountAsync("id=@Id", new { Id = userId });
             if (count == 0)

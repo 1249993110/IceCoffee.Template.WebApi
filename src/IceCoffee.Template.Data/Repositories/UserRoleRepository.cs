@@ -3,7 +3,7 @@ using IceCoffee.Template.Data.IRepositories;
 
 namespace IceCoffee.Template.Data.Repositories
 {
-    public class UserRoleRepository : PostgreSqlRepository<T_UserRole>, IUserRoleRepository
+    public class UserRoleRepository : SQLiteRepository<T_UserRole>, IUserRoleRepository
     {
         public UserRoleRepository(DefaultDbConnectionInfo dbConnectionInfo) : base(dbConnectionInfo)
         {

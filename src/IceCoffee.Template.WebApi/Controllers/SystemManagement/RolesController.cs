@@ -22,7 +22,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         /// <param name="roleId"></param>
         /// <returns></returns>
         [HttpGet("{roleId}")]
-        public async Task<Response<T_Role>> Get([FromRoute] Guid roleId)
+        public async Task<Response<T_Role>> Get([FromRoute] string roleId)
         {
             var entity = (await _roleRepository.QueryByIdAsync("id", roleId)).FirstOrDefault();
             if (entity == null)
@@ -54,7 +54,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         public async Task<Response> Post([FromBody] RoleAddModel model)
         {
             var entity = model.Adapt<T_Role>();
-            entity.Id = Guid.NewGuid();
+            entity.Id = Guid.NewGuid().ToString();
             entity.CreatorId = UserInfo.UserId;
 
             await _roleRepository.InsertAsync(entity);
@@ -90,7 +90,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         /// <param name="roleId"></param>
         /// <returns></returns>
         [HttpDelete("{roleId}")]
-        public async Task<Response> Delete([FromRoute] Guid roleId)
+        public async Task<Response> Delete([FromRoute] string roleId)
         {
             int count = await _roleRepository.DeleteByIdAsync("id", roleId);
             if (count != 1)
@@ -107,7 +107,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         /// <param name="roleIds"></param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<Response> Delete([FromBody, Required, MinLength(1)] Guid[] roleIds)
+        public async Task<Response> Delete([FromBody, Required, MinLength(1)] string[] roleIds)
         {
             await _roleRepository.DeleteBatchByIdsAsync("id", roleIds, true);
             return SucceededResult();

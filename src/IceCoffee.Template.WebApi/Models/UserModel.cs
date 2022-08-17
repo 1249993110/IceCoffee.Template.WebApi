@@ -5,7 +5,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Guid Id { get; set; }
+        public string? Id { get; set; }
 
         /// <summary>
         /// 
@@ -112,21 +112,17 @@
 
     public class UserEditModel
     {
-        public UserEditModel(string name)
-        {
-            Name = name;
-        }
-
         /// <summary>
         /// 
         /// </summary>
-        public Guid Id { get; set; }
+        [Required]
+        public string? Id { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
         [Required]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// 

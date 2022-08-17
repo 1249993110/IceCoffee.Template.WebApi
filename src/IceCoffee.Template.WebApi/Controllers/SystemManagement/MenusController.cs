@@ -23,7 +23,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         /// <param name="menuId"></param>
         /// <returns></returns>
         [HttpGet("{menuId}")]
-        public async Task<Response<T_Menu>> Get([FromRoute] Guid menuId)
+        public async Task<Response<T_Menu>> Get([FromRoute] string menuId)
         {
             var entity = (await _menuRepository.QueryByIdAsync("id", menuId)).FirstOrDefault();
             if (entity == null)
@@ -54,7 +54,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         public async Task<Response> Post([FromBody] MenuAddModel model)
         {
             var entity = model.Adapt<T_Menu>();
-            entity.Id = Guid.NewGuid();
+            entity.Id = Guid.NewGuid().ToString();
             entity.CreatorId = UserInfo.UserId;
 
             await _menuRepository.InsertAsync(entity);
@@ -90,7 +90,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         /// <param name="menuId"></param>
         /// <returns></returns>
         [HttpDelete("{menuId}")]
-        public async Task<Response> Delete([FromRoute] Guid menuId)
+        public async Task<Response> Delete([FromRoute] string menuId)
         {
             int count = await _menuRepository.DeleteByIdAsync("id", menuId);
             if (count != 1)
@@ -107,7 +107,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         /// <param name="menuIds"></param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<Response> Delete([FromBody, Required, MinLength(1)] Guid[] menuIds)
+        public async Task<Response> Delete([FromBody, Required, MinLength(1)] string[] menuIds)
         {
             await _menuRepository.DeleteBatchByIdsAsync("id", menuIds, true);
             return SucceededResult();

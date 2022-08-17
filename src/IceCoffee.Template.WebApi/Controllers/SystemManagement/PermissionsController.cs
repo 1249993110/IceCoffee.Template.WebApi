@@ -22,7 +22,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         /// <param name="permissionId"></param>
         /// <returns></returns>
         [HttpGet("{permissionId}")]
-        public async Task<Response<T_Permission>> Get([FromRoute] Guid permissionId)
+        public async Task<Response<T_Permission>> Get([FromRoute] string permissionId)
         {
             var entity = (await _permissionRepository.QueryByIdAsync("id", permissionId)).FirstOrDefault();
             if (entity == null)
@@ -54,7 +54,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         public async Task<Response> Post([FromBody] PermissionAddModel model)
         {
             var entity = model.Adapt<T_Permission>();
-            entity.Id = Guid.NewGuid();
+            entity.Id = Guid.NewGuid().ToString();
             entity.CreatorId = UserInfo.UserId;
 
             await _permissionRepository.InsertAsync(entity);
@@ -90,7 +90,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         /// <param name="permissionId"></param>
         /// <returns></returns>
         [HttpDelete("{permissionId}")]
-        public async Task<Response> Delete([FromRoute] Guid permissionId)
+        public async Task<Response> Delete([FromRoute] string permissionId)
         {
             int count = await _permissionRepository.DeleteByIdAsync("id", permissionId);
             if (count != 1)
@@ -107,7 +107,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         /// <param name="permissionIds"></param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<Response> Delete([FromBody, Required, MinLength(1)] Guid[] permissionIds)
+        public async Task<Response> Delete([FromBody, Required, MinLength(1)] string[] permissionIds)
         {
             await _permissionRepository.DeleteBatchByIdsAsync("id", permissionIds, true);
             return SucceededResult();

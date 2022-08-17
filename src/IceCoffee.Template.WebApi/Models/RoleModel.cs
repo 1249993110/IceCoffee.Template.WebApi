@@ -25,6 +25,6 @@
         /// 
         /// </summary>
         [Required]
-        public Guid Id { get; set; }
+        public string? Id { get; set; }
     }
 }
