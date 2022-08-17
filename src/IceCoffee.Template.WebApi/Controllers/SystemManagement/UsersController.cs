@@ -25,7 +25,7 @@ namespace HYCX.Power.WebApi.Controllers.SystemManagement
         [HttpGet("{userId}")]
         public async Task<Response<UserModel>> Get([FromRoute] string userId)
         {
-            var entity = (await _userRepository.QueryByIdAsync("id", userId)).FirstOrDefault();
+            var entity = (await _userRepository.QueryByIdAsync("Id", userId)).FirstOrDefault();
             if (entity == null)
             {
                 return FailedResult("获取失败");
@@ -42,7 +42,7 @@ namespace HYCX.Power.WebApi.Controllers.SystemManagement
         [HttpGet]
         public async Task<Response<PaginationQueryResult<UserModel>>> Get([FromQuery] PaginationQueryModel model)
         {
-            var dto = await _userRepository.QueryPagedAsync(model.Adapt<PaginationQueryDto>(), new string[] { "name", "display_name" });
+            var dto = await _userRepository.QueryPagedAsync(model.Adapt<PaginationQueryDto>(), new string[] { "Name", "DisplayName" });
             return PaginationQueryResult(dto.Adapt<PaginationQueryResult<UserModel>>());
         }
 
@@ -54,7 +54,7 @@ namespace HYCX.Power.WebApi.Controllers.SystemManagement
         [HttpPost]
         public async Task<Response> Post([FromBody] UserAddModel model)
         {
-            int count = await _userRepository.QueryRecordCountAsync("name=@Name", new { model.Name });
+            int count = await _userRepository.QueryRecordCountAsync("Name=@Name", new { model.Name });
             if (count != 0)
             {
                 return FailedResult($"新增失败, 用户名称: {model.Name} 已存在");
@@ -81,13 +81,13 @@ namespace HYCX.Power.WebApi.Controllers.SystemManagement
         public async Task<Response> Put([FromBody] UserEditModel model)
         {
             var userId = model.Id;
-            var entity = (await _userRepository.QueryByIdAsync("id", userId)).FirstOrDefault();
+            var entity = (await _userRepository.QueryByIdAsync("Id", userId)).FirstOrDefault();
             if (entity == null)
             {
                 return FailedResult($"修改失败, 用户Id: {userId} 不存在");
             }
 
-            int count = await _userRepository.QueryRecordCountAsync("name=@Name AND id!=@Id", new { model.Name, model.Id });
+            int count = await _userRepository.QueryRecordCountAsync("Name=@Name AND Id!=@Id", new { model.Name, model.Id });
             if (count != 0)
             {
                 return FailedResult($"修改失败, 用户名称: {model.Name} 已存在");
@@ -114,7 +114,7 @@ namespace HYCX.Power.WebApi.Controllers.SystemManagement
         [HttpDelete("{userId}")]
         public async Task<Response> Delete([FromRoute] string userId)
         {
-            int count = await _userRepository.DeleteByIdAsync("id", userId);
+            int count = await _userRepository.DeleteByIdAsync("Id", userId);
             if (count != 1)
             {
                 return FailedResult($"删除失败, 用户Id: {userId} 不存在");
@@ -131,7 +131,7 @@ namespace HYCX.Power.WebApi.Controllers.SystemManagement
         [HttpDelete]
         public async Task<Response> Delete([FromBody, Required, MinLength(1)] string[] userIds)
         {
-            await _userRepository.DeleteBatchByIdsAsync("id", userIds, true);
+            await _userRepository.DeleteBatchByIdsAsync("Id", userIds, true);
             return SucceededResult();
         }
     }

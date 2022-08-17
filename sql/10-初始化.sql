@@ -13,6 +13,6 @@ INSERT INTO T_Menu(Id,ParentId,Name,Sort,Url,IsEnabled) VALUES('ABC2607E-3EA6-D7
 INSERT INTO T_Menu(Id,ParentId,Name,Sort,Url,IsEnabled) VALUES('32B78DAF-CCAF-0AAE-2AF8-143ECD878D58',(SELECT Id FROM T_Menu WHERE Name='系统管理'),'角色管理',2,'/system-management/roles',true);
 INSERT INTO T_Menu(Id,ParentId,Name,Sort,Url,IsEnabled) VALUES('2F2C047E-716B-417E-6AE8-188E1F3AA684',(SELECT Id FROM T_Menu WHERE Name='系统管理'),'菜单管理',3,'/system-management/menus',true);
 INSERT INTO T_Menu(Id,ParentId,Name,Sort,Url,IsEnabled) VALUES('4AF9C52E-DA74-116C-4EA3-95DBE373B0D5',(SELECT Id FROM T_Menu WHERE Name='系统管理'),'权限管理',4,'/system-management/permissions',true);
-INSERT INTO T_Menu(Id,ParentId,Name,Sort,Url,IsEnabled,IsExternalLink) VALUES('3001E9D1-17EB-2B7C-FAE2-7724B74FD7CA',null,'接口文档',99,'/api/swagger/index.html',true,true);
+INSERT INTO T_Menu(Id,ParentId,Name,Sort,Url,IsEnabled,IsExternalLink) VALUES('3001E9D1-17EB-2B7C-FAE2-7724B74FD7CA',null,'接口文档',100,'/swagger/index.html',true,true);
 
 INSERT INTO T_RoleMenu(Fk_RoleId,Fk_MenuId) SELECT r.Id AS Fk_RoleId, m.Id AS Fk_MenuId FROM T_Role AS r LEFT JOIN T_Menu AS m WHERE r.Name='Administrator';

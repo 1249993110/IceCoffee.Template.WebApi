@@ -1,5 +1,4 @@
-﻿using IceCoffee.Template.Data.Entities;
-using Mapster;
+﻿using Mapster;
 
 namespace IceCoffee.Template.WebApi.Extensions
 {

@@ -45,11 +45,11 @@ namespace IceCoffee.Template.WebApi.Utils
                 ++user.AccessFailedCount;
                 if (user.AccessFailedCount > 3)
                 {
-                    await userRepository.UpdateColumnByIdAsync("id", user.Id, "lockout_end_date", now.AddMinutes(10));
+                    await userRepository.UpdateColumnByIdAsync("Id", user.Id, "lockout_end_date", now.AddMinutes(10));
                     throw new Exception("您的账户已被锁定, 请稍后重试");
                 }
 
-                await userRepository.UpdateColumnByIdAsync("id", user.Id, "access_failed_count", user.AccessFailedCount);
+                await userRepository.UpdateColumnByIdAsync("Id", user.Id, "access_failed_count", user.AccessFailedCount);
                 throw new Exception("密码错误");
             }
 
@@ -58,11 +58,11 @@ namespace IceCoffee.Template.WebApi.Utils
             user.LastLoginIp = httpContext.GetRemoteIpAddress();
             await userRepository.UpdateAsync(user);
 
-            var vUserRoles = await vUserRoleRepository.QueryByIdAsync("user_id", user.Id);
+            var vUserRoles = await vUserRoleRepository.QueryByIdAsync("UserId", user.Id);
             var roleIds = vUserRoles.Select(s => s.RoleId);
             var roleNames = vUserRoles.Select(s => s.RoleName);
 
-            var vRolePermission = (await vRolePermissionRepository.QueryByIdsAsync("role_id", roleIds));
+            var vRolePermission = (await vRolePermissionRepository.QueryByIdsAsync("RoleId", roleIds));
             var areas = vRolePermission.Select(s => s.Area).Distinct();
 
             return new UserInfo()

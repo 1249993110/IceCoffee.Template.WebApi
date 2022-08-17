@@ -24,7 +24,7 @@
         [HttpGet]
         public async Task<Response<IEnumerable<string>>> GetByRoleId([FromQuery, Required] string roleId)
         {
-            var entities = await _userRoleRepository.QueryByIdAsync("fk_role_id", roleId);
+            var entities = await _userRoleRepository.QueryByIdAsync("Fk_RoleId", roleId);
             return SucceededResult(entities.Select(s => s.UserId));
         }
 
@@ -36,7 +36,7 @@
         [HttpGet]
         public async Task<Response<IEnumerable<string>>> GetByRoleName([FromQuery, Required] string roleName)
         {
-            var entities = await _vUserRoleRepository.QueryByIdAsync("role_name", roleName);
+            var entities = await _vUserRoleRepository.QueryByIdAsync("RoleName", roleName);
             return SucceededResult(entities.Select(s => s.UserId));
         }
     }

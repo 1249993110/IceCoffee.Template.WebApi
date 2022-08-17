@@ -24,7 +24,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         [HttpGet("{permissionId}")]
         public async Task<Response<T_Permission>> Get([FromRoute] string permissionId)
         {
-            var entity = (await _permissionRepository.QueryByIdAsync("id", permissionId)).FirstOrDefault();
+            var entity = (await _permissionRepository.QueryByIdAsync("Id", permissionId)).FirstOrDefault();
             if (entity == null)
             {
                 return FailedResult("获取失败");
@@ -41,7 +41,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         [HttpGet]
         public async Task<Response<PaginationQueryResult<T_Permission>>> Get([FromQuery] PaginationQueryModel models)
         {
-            var dto = await _permissionRepository.QueryPagedAsync(models.Adapt<PaginationQueryDto>(), "area");
+            var dto = await _permissionRepository.QueryPagedAsync(models.Adapt<PaginationQueryDto>(), "Area");
             return PaginationQueryResult(dto.Adapt<PaginationQueryResult<T_Permission>>());
         }
 
@@ -70,7 +70,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         public async Task<Response> Put([FromBody] PermissionEditModel model)
         {
             var permissionId = model.Id;
-            var entity = (await _permissionRepository.QueryByIdAsync("id", permissionId)).FirstOrDefault();
+            var entity = (await _permissionRepository.QueryByIdAsync("Id", permissionId)).FirstOrDefault();
             if (entity == null)
             {
                 return FailedResult($"修改失败, 权限Id: {permissionId} 不存在");
@@ -92,7 +92,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         [HttpDelete("{permissionId}")]
         public async Task<Response> Delete([FromRoute] string permissionId)
         {
-            int count = await _permissionRepository.DeleteByIdAsync("id", permissionId);
+            int count = await _permissionRepository.DeleteByIdAsync("Id", permissionId);
             if (count != 1)
             {
                 return FailedResult($"删除失败, 权限Id: {permissionId} 不存在");
@@ -109,7 +109,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         [HttpDelete]
         public async Task<Response> Delete([FromBody, Required, MinLength(1)] string[] permissionIds)
         {
-            await _permissionRepository.DeleteBatchByIdsAsync("id", permissionIds, true);
+            await _permissionRepository.DeleteBatchByIdsAsync("Id", permissionIds, true);
             return SucceededResult();
         }
     }

@@ -29,9 +29,9 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         /// <param name="roleId"></param>
         /// <returns></returns>
         [HttpGet("{roleId}")]
-        public async Task<Response<IEnumerable<string>>> Get([FromRoute] string roleId)
+        public async Task<Response<IEnumerable<string>>> Get([FromRoute, Required] string roleId)
         {
-            var entities = await _roleMenuRepository.QueryByIdAsync("fk_role_id", roleId);
+            var entities = await _roleMenuRepository.QueryByIdAsync("Fk_RoleId", roleId);
 
             return SucceededResult(entities.Select(e => e.MenuId));
         }
@@ -45,7 +45,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         [HttpPut("{roleId}")]
         public async Task<Response> Put([FromRoute] string roleId, [FromBody, Required] string[] menuIds)
         {
-            int count = await _roleRepository.QueryRecordCountAsync("id=@Id", new { Id = roleId });
+            int count = await _roleRepository.QueryRecordCountAsync("Id=@Id", new { Id = roleId });
             if (count == 0)
             {
                 return FailedResult($"修改失败, 角色Id: {roleId} 不存在");
@@ -66,7 +66,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
                 UnitOfWork.Default.EnterContext();
                 try
                 {
-                    _roleMenuRepository.DeleteById("fk_role_id", roleId);
+                    _roleMenuRepository.DeleteById("Fk_RoleId", roleId);
                     _roleMenuRepository.InsertBatch(entities);
 
                     UnitOfWork.Default.SaveChanges();
@@ -79,7 +79,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
             }
             else
             {
-                await _roleMenuRepository.DeleteByIdAsync("fk_role_id", roleId);
+                await _roleMenuRepository.DeleteByIdAsync("Fk_RoleId", roleId);
             }
 
             return SucceededResult();

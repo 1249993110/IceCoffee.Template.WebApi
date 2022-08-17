@@ -24,7 +24,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         [HttpGet("{roleId}")]
         public async Task<Response<T_Role>> Get([FromRoute] string roleId)
         {
-            var entity = (await _roleRepository.QueryByIdAsync("id", roleId)).FirstOrDefault();
+            var entity = (await _roleRepository.QueryByIdAsync("Id", roleId)).FirstOrDefault();
             if (entity == null)
             {
                 return FailedResult("获取失败");
@@ -41,7 +41,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         [HttpGet]
         public async Task<Response<PaginationQueryResult<T_Role>>> Get([FromQuery] PaginationQueryModel models)
         {
-            var dto = await _roleRepository.QueryPagedAsync(models.Adapt<PaginationQueryDto>(), "name");
+            var dto = await _roleRepository.QueryPagedAsync(models.Adapt<PaginationQueryDto>(), "Name");
             return PaginationQueryResult(dto.Adapt<PaginationQueryResult<T_Role>>());
         }
 
@@ -70,7 +70,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         public async Task<Response> Put([FromBody] RoleEditModel model)
         {
             var roleId = model.Id;
-            var entity = (await _roleRepository.QueryByIdAsync("id", roleId)).FirstOrDefault();
+            var entity = (await _roleRepository.QueryByIdAsync("Id", roleId)).FirstOrDefault();
             if (entity == null)
             {
                 return FailedResult($"修改失败, 角色Id: {roleId} 不存在");
@@ -92,7 +92,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         [HttpDelete("{roleId}")]
         public async Task<Response> Delete([FromRoute] string roleId)
         {
-            int count = await _roleRepository.DeleteByIdAsync("id", roleId);
+            int count = await _roleRepository.DeleteByIdAsync("Id", roleId);
             if (count != 1)
             {
                 return FailedResult($"删除失败, 角色Id: {roleId} 不存在");
@@ -109,7 +109,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         [HttpDelete]
         public async Task<Response> Delete([FromBody, Required, MinLength(1)] string[] roleIds)
         {
-            await _roleRepository.DeleteBatchByIdsAsync("id", roleIds, true);
+            await _roleRepository.DeleteBatchByIdsAsync("Id", roleIds, true);
             return SucceededResult();
         }
     }

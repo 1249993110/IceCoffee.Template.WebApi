@@ -25,7 +25,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         [HttpGet("{menuId}")]
         public async Task<Response<T_Menu>> Get([FromRoute] string menuId)
         {
-            var entity = (await _menuRepository.QueryByIdAsync("id", menuId)).FirstOrDefault();
+            var entity = (await _menuRepository.QueryByIdAsync("Id", menuId)).FirstOrDefault();
             if (entity == null)
             {
                 return FailedResult("获取失败");
@@ -70,7 +70,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         public async Task<Response> Put([FromBody] MenuEditModel model)
         {
             var menuId = model.Id;
-            var entity = (await _menuRepository.QueryByIdAsync("id", menuId)).FirstOrDefault();
+            var entity = (await _menuRepository.QueryByIdAsync("Id", menuId)).FirstOrDefault();
             if (entity == null)
             {
                 return FailedResult($"修改失败, 菜单Id: {menuId} 不存在");
@@ -92,7 +92,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         [HttpDelete("{menuId}")]
         public async Task<Response> Delete([FromRoute] string menuId)
         {
-            int count = await _menuRepository.DeleteByIdAsync("id", menuId);
+            int count = await _menuRepository.DeleteByIdAsync("Id", menuId);
             if (count != 1)
             {
                 return FailedResult($"删除失败, 菜单Id: {menuId} 不存在");
@@ -109,7 +109,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         [HttpDelete]
         public async Task<Response> Delete([FromBody, Required, MinLength(1)] string[] menuIds)
         {
-            await _menuRepository.DeleteBatchByIdsAsync("id", menuIds, true);
+            await _menuRepository.DeleteBatchByIdsAsync("Id", menuIds, true);
             return SucceededResult();
         }
     }

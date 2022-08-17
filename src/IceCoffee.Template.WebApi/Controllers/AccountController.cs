@@ -32,7 +32,7 @@ namespace IceCoffee.Template.WebApi.Controllers
             var userRepository = HttpContext.RequestServices.GetRequiredService<IUserRepository>();
             var refreshTokenRepository = HttpContext.RequestServices.GetRequiredService<IRefreshTokenRepository>();
 
-            var user = (await userRepository.QueryByIdAsync("id", userId)).FirstOrDefault();
+            var user = (await userRepository.QueryByIdAsync("Id", userId)).FirstOrDefault();
             if (user == null)
             {
                 throw new Exception("修改密码异常, 用户不存在");
@@ -53,7 +53,7 @@ namespace IceCoffee.Template.WebApi.Controllers
             user.PasswordSalt = newPasswordSalt;
             await userRepository.UpdateAsync(user);
 
-            await refreshTokenRepository.DeleteByIdAsync("fk_user_id", userId);
+            await refreshTokenRepository.DeleteByIdAsync("Fk_UserId", userId);
             return SucceededResult();
         }
 
@@ -67,7 +67,7 @@ namespace IceCoffee.Template.WebApi.Controllers
         public async Task<Response<JwtToken>> RefreshToken([FromBody] RefreshTokenModel model)
         {
             var refreshTokenRepository = HttpContext.RequestServices.GetRequiredService<IRefreshTokenRepository>();
-            var refreshToken = (await refreshTokenRepository.QueryByIdAsync("id", model.RefreshToken)).First();
+            var refreshToken = (await refreshTokenRepository.QueryByIdAsync("Id", model.RefreshToken)).First();
             var storedRefreshToken = new StoredRefreshToken()
             {
                 Id = refreshToken.Id,
@@ -161,7 +161,7 @@ namespace IceCoffee.Template.WebApi.Controllers
             var roleMenuRepository = HttpContext.RequestServices.GetRequiredService<IRoleMenuRepository>();
 
             // 第1步：根据用户找到所属角色
-            var userRoles = await vUserRoleRepository.QueryByIdAsync("user_id", userId);
+            var userRoles = await vUserRoleRepository.QueryByIdAsync("UserId", userId);
 
             if (userRoles.Any() == false)
             {
@@ -176,7 +176,7 @@ namespace IceCoffee.Template.WebApi.Controllers
             }
 
             // 第2步：根据角色Id找到菜单Id
-            var roleMenus = await roleMenuRepository.QueryByIdsAsync("fk_role_id", hashSet);
+            var roleMenus = await roleMenuRepository.QueryByIdsAsync("Fk_RoleId", hashSet);
             if (roleMenus.Any() == false)
             {
                 return FailedResult("获取失败");
@@ -190,7 +190,7 @@ namespace IceCoffee.Template.WebApi.Controllers
             }
 
             // 第3步：获取菜单
-            var menus = await menuRepository.QueryByIdsAsync("id", hashSet);
+            var menus = await menuRepository.QueryByIdsAsync("Id", hashSet);
             // 过滤禁用的菜单
             menus = menus.Where(p => p.IsEnabled);
 
