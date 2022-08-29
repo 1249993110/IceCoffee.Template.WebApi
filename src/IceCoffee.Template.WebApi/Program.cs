@@ -1,9 +1,9 @@
 using IceCoffee.AspNetCore.Authentication;
 using IceCoffee.AspNetCore.Authorization;
+using IceCoffee.AspNetCore.JsonConverters;
 using IceCoffee.AspNetCore.Middlewares;
 using IceCoffee.AspNetCore.Options;
 using IceCoffee.Template.Data;
-using IceCoffee.Template.WebApi.JsonConverters;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -154,9 +154,6 @@ namespace IceCoffee.Template.WebApi
             {
                 options.InvalidModelStateResponseFactory = context =>
                 {
-                    string messages = string.Join(Environment.NewLine,
-                        context.ModelState.Values.SelectMany(s => s.Errors).Select(s => s.ErrorMessage));
-
                     IConvertToActionResult result = new Response()
                     {
                         Status = HttpStatus.BadRequest,
