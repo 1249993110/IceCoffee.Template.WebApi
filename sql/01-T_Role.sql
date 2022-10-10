@@ -6,5 +6,5 @@ CREATE TABLE IF NOT EXISTS T_Role(
 	ModifierId TEXT,											--修改者Id
 	ModifiedDate TIMESTAMP,										--修改日期
 	Name VARCHAR(64) NOT NULL,									--角色名称
-	description VARCHAR(512)									--说明
+	Description VARCHAR(512)									--说明
 );
