@@ -3,6 +3,8 @@ using IceCoffee.AspNetCore.Authorization;
 using IceCoffee.AspNetCore.JsonConverters;
 using IceCoffee.AspNetCore.Middlewares;
 using IceCoffee.AspNetCore.Options;
+using IceCoffee.DbCore;
+using IceCoffee.DbCore.Utils;
 using IceCoffee.Template.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -12,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using NSwag;
 using Serilog;
+using System.Text;
 
 [assembly: ApiController]
 namespace IceCoffee.Template.WebApi

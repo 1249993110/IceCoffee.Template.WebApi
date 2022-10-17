@@ -45,11 +45,11 @@ namespace IceCoffee.Template.WebApi.Utils
                 ++user.AccessFailedCount;
                 if (user.AccessFailedCount > 3)
                 {
-                    await userRepository.UpdateColumnByIdAsync("Id", user.Id, "lockout_end_date", now.AddMinutes(10));
+                    await userRepository.UpdateColumnByIdAsync("Id", user.Id, "LockoutEndDate", now.AddMinutes(10));
                     throw new Exception("您的账户已被锁定, 请稍后重试");
                 }
 
-                await userRepository.UpdateColumnByIdAsync("Id", user.Id, "access_failed_count", user.AccessFailedCount);
+                await userRepository.UpdateColumnByIdAsync("Id", user.Id, "AccessFailedCount", user.AccessFailedCount);
                 throw new Exception("密码错误");
             }
 
