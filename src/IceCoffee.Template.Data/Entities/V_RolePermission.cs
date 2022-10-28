@@ -8,7 +8,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public string RoleId { get; set; }
+        public Guid RoleId { get; set; }
 
         /// <summary>
         /// 
@@ -18,7 +18,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public string PermissionId { get; set; }
+        public Guid? PermissionId { get; set; }
 
         /// <summary>
         /// 

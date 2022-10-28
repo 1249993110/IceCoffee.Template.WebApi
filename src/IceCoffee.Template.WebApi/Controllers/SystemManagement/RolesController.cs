@@ -54,8 +54,8 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         public async Task<Response> Post([FromBody] RoleAddModel model)
         {
             var entity = model.Adapt<T_Role>();
-            entity.Id = Guid.NewGuid().ToString();
-            entity.CreatorId = UserInfo.UserId;
+            entity.Id = Guid.NewGuid();
+            entity.CreatorId = UserInfo.UserId.ToGuidNullable();
 
             await _roleRepository.InsertAsync(entity);
             return SucceededResult();
@@ -78,7 +78,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
 
             model.Adapt(entity);
             entity.ModifiedDate = DateTime.Now;
-            entity.ModifierId = UserInfo.UserId;
+            entity.ModifierId = UserInfo.UserId.ToGuidNullable();
 
             await _roleRepository.UpdateAsync(entity);
             return SucceededResult();

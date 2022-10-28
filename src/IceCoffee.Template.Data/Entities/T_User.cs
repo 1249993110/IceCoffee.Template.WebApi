@@ -9,7 +9,7 @@
         /// 
         /// </summary>
         [PrimaryKey]
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// 

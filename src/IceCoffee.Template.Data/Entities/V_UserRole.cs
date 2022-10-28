@@ -8,7 +8,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
 
         /// <summary>
         /// 
@@ -33,7 +33,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public string RoleId { get; set; }
+        public Guid? RoleId { get; set; }
 
         /// <summary>
         /// 

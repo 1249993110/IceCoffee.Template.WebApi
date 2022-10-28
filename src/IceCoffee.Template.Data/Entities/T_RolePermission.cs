@@ -10,14 +10,14 @@
         /// </summary>
         [PrimaryKey]
         [Column("Fk_RoleId")]
-        public string RoleId { get; set; }
+        public Guid RoleId { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
         [PrimaryKey]
         [Column("Fk_PermissionId")]
-        public string PermissionId { get; set; }
+        public Guid PermissionId { get; set; }
 
     }
 }

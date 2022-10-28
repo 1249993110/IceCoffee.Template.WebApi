@@ -9,7 +9,7 @@
         /// 
         /// </summary>
         [PrimaryKey]
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// 
@@ -20,12 +20,12 @@
         /// <summary>
         /// 
         /// </summary>
-        public string CreatorId { get; set; }
+        public Guid? CreatorId { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public string ModifierId { get; set; }
+        public Guid? ModifierId { get; set; }
 
         /// <summary>
         /// 

@@ -1,10 +1,12 @@
-PRAGMA FOREIGN_KEYS = ON;					--启用外键
+USE [IceCoffee.Template]
+GO
 
 --用户角色表
-CREATE TABLE IF NOT EXISTS T_UserRole(
-	Fk_UserId TEXT NOT NULL,				--用户Id
-	Fk_RoleId TEXT NOT NULL,				--角色Id
+CREATE TABLE T_UserRole(
+	Fk_UserId UNIQUEIDENTIFIER NOT NULL,				--用户Id
+	Fk_RoleId UNIQUEIDENTIFIER NOT NULL,				--角色Id
 	PRIMARY KEY(Fk_UserId,Fk_RoleId),
 	FOREIGN KEY (Fk_UserId) REFERENCES T_User(Id) ON DELETE CASCADE,
 	FOREIGN KEY (Fk_RoleId) REFERENCES T_Role(Id) ON DELETE CASCADE
 );
+GO

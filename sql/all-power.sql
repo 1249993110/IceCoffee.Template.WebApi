@@ -1,4 +1,4 @@
-USE [HYCX.Aqi.ZengCheng]
+USE [IceCoffee.Template]
 GO
 
 --用户表
@@ -25,7 +25,7 @@ CREATE UNIQUE INDEX Index_Name ON T_User(Name);
 CREATE UNIQUE INDEX Index_PhoneNumber ON T_User(PhoneNumber);
 CREATE INDEX Index_DisplayName ON T_User(DisplayName);
 GO
-USE [HYCX.Aqi.ZengCheng]
+USE [IceCoffee.Template]
 GO
 
 --角色表
@@ -39,7 +39,7 @@ CREATE TABLE T_Role(
 	Description VARCHAR(512)									--说明
 );
 GO
-USE [HYCX.Aqi.ZengCheng]
+USE [IceCoffee.Template]
 GO
 
 --用户角色表
@@ -51,7 +51,7 @@ CREATE TABLE T_UserRole(
 	FOREIGN KEY (Fk_RoleId) REFERENCES T_Role(Id) ON DELETE CASCADE
 );
 GO
-USE [HYCX.Aqi.ZengCheng]
+USE [IceCoffee.Template]
 GO
 
 --菜单表
@@ -71,7 +71,7 @@ CREATE TABLE T_Menu(
 	Description VARCHAR(512)									--说明
 );
 GO
-USE [HYCX.Aqi.ZengCheng]
+USE [IceCoffee.Template]
 GO
 
 --角色菜单表
@@ -83,7 +83,7 @@ CREATE TABLE T_RoleMenu(
 	FOREIGN KEY (Fk_MenuId) REFERENCES T_Menu(Id) ON DELETE CASCADE
 );
 GO
-USE [HYCX.Aqi.ZengCheng]
+USE [IceCoffee.Template]
 GO
 
 --许可表
@@ -97,7 +97,7 @@ CREATE TABLE T_Permission(
 	Description VARCHAR(512)									--说明
 );
 GO
-USE [HYCX.Aqi.ZengCheng]
+USE [IceCoffee.Template]
 GO
 
 --角色许可表
@@ -109,7 +109,7 @@ CREATE TABLE T_RolePermission(
 	FOREIGN KEY (Fk_PermissionId) REFERENCES T_Permission(Id) ON DELETE CASCADE
 );
 GO
-USE [HYCX.Aqi.ZengCheng]
+USE [IceCoffee.Template]
 GO
 
 --创建视图
@@ -129,7 +129,7 @@ LEFT JOIN T_UserRole AS ur ON
 LEFT JOIN T_Role AS r ON
 	ur.Fk_RoleId = r.Id;
 GO
-USE [HYCX.Aqi.ZengCheng]
+USE [IceCoffee.Template]
 GO
 
 --创建视图
@@ -146,7 +146,7 @@ LEFT JOIN T_RolePermission AS rp ON
 LEFT JOIN T_Permission AS p ON
 	rp.Fk_PermissionId = p.Id;
 GO
-USE [HYCX.Aqi.ZengCheng]
+USE [IceCoffee.Template]
 GO
 
 --Jwt RefreshToken表
@@ -164,7 +164,7 @@ CREATE TABLE T_RefreshToken(
 CREATE INDEX Index_Fk_UserId ON T_RefreshToken(Fk_UserId);
 CREATE UNIQUE INDEX Index_JwtId ON T_RefreshToken(JwtId);
 GO
-USE [HYCX.Aqi.ZengCheng]
+USE [IceCoffee.Template]
 GO
 
 INSERT INTO T_User(Id,Name,DisplayName,PasswordHash,PasswordSalt,LoginEnabled) VALUES('6474EFE2-7C58-9C1B-8A89-88C898CB543A','admin','系统管理员','Xg9+QTHDb5Mw9vaEe9q8PqvlZqE=','NCPuMnV9WlfswrYk42cENwKP2mU/K9IJ',1);

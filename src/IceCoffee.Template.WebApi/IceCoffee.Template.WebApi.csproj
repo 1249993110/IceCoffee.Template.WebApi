@@ -11,8 +11,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="IceCoffee.AspNetCore" Version="1.0.3.2" GeneratePathProperty="true" />
-	  <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="6.0.0" />
+	  <PackageReference Include="FastExpressionCompiler" Version="3.3.3" />
+	  <PackageReference Include="IceCoffee.AspNetCore" Version="1.0.3.7" GeneratePathProperty="true" />
+	  <PackageReference Include="IceCoffee.Common" Version="1.0.2.10" />
+	  <PackageReference Include="Mapster" Version="7.3.0" />
+	  <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="6.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -28,9 +31,6 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-	  <None Update="Data\database.db">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
 	  <None Update="install.bat">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>

@@ -1,12 +1,10 @@
+using FastExpressionCompiler;
 using IceCoffee.AspNetCore.Authentication;
-using IceCoffee.AspNetCore.Authorization;
 using IceCoffee.AspNetCore.JsonConverters;
 using IceCoffee.AspNetCore.Middlewares;
 using IceCoffee.AspNetCore.Options;
-using IceCoffee.DbCore;
-using IceCoffee.DbCore.Utils;
 using IceCoffee.Template.Data;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Mapster;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
@@ -14,7 +12,6 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using NSwag;
 using Serilog;
-using System.Text;
 
 [assembly: ApiController]
 namespace IceCoffee.Template.WebApi
@@ -23,8 +20,6 @@ namespace IceCoffee.Template.WebApi
     {
         public static void Main(string[] args)
         {
-            Directory.SetCurrentDirectory(AppContext.BaseDirectory);
-
             Log.Logger = new LoggerConfiguration()
                  .WriteTo.Console()
                  .CreateBootstrapLogger();
@@ -33,6 +28,10 @@ namespace IceCoffee.Template.WebApi
 
             try
             {
+                Directory.SetCurrentDirectory(AppContext.BaseDirectory);
+
+                TypeAdapterConfig.GlobalSettings.Compiler = exp => exp.CompileFast();
+
                 var builder = WebApplication.CreateBuilder(args);
                 var hostBuilder = builder.Host;
 
@@ -42,7 +41,7 @@ namespace IceCoffee.Template.WebApi
                     .Enrich.FromLogContext());
 
                 // 启用 Windows 服务部署
-                // hostBuilder.UseWindowsService();
+                hostBuilder.UseWindowsService();
 
                 builder.ConfigureServices();
 
@@ -81,6 +80,12 @@ namespace IceCoffee.Template.WebApi
             app.UseMiddleware<GlobalExceptionHandleMiddleware>();
             app.UseForwardedHeaders();
 
+            string pathBase = config.GetSection("PathBase").Get<string>();
+            if (string.IsNullOrEmpty(pathBase) == false)
+            {
+                app.UsePathBase(pathBase);
+            }
+
             bool enableSwagger = config.GetSection("EnableSwagger").Get<bool>();
             if (enableSwagger)
             {
@@ -102,6 +107,7 @@ namespace IceCoffee.Template.WebApi
             app.UseStaticFiles();
 
             app.UseRouting();
+
             // UseCors 必须在 UseAuthorization 之前在 UseRouting 之后调用
             bool enableCors = config.GetSection("EnableCors").Get<bool>();
             if (enableCors)
@@ -120,7 +126,7 @@ namespace IceCoffee.Template.WebApi
                 endpoints.MapControllers();
             });
         }
-       
+
         /// <summary>
         /// 注册服务
         /// </summary>
@@ -214,6 +220,7 @@ namespace IceCoffee.Template.WebApi
             #endregion 全球化&本地化
 
             #region 认证&授权
+
             services.AddUserInfo();
 
             string accessToken = config.GetSection("AccessToken").Get<string>();
@@ -241,6 +248,7 @@ namespace IceCoffee.Template.WebApi
             }).AddApiKeyAuthentication(options => options.AccessToken = accessToken);
 
             services.AddAreaAuthorization();
+
             #endregion 认证&授权
 
             #region Swagger文档

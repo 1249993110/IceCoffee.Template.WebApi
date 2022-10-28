@@ -1,4 +1,6 @@
 ﻿using IceCoffee.Common.Security.Cryptography;
+using IceCoffee.Template.Data.Entities;
+using IceCoffee.Template.Data.Repositories;
 using IceCoffee.Template.WebApi.Extensions;
 using IceCoffee.Template.WebApi.Utils;
 
@@ -10,6 +12,13 @@ namespace IceCoffee.Template.WebApi.Controllers
     [Route("api/[controller]/[action]")]
     public class AccountController : AccountControllerBase
     {
+        private readonly ILogger<AccountController> _logger;
+
+        public AccountController(ILogger<AccountController> logger)
+        {
+            _logger = logger;
+        }
+
         /// <summary>
         /// 用户信息
         /// </summary>
@@ -70,21 +79,29 @@ namespace IceCoffee.Template.WebApi.Controllers
             var refreshToken = (await refreshTokenRepository.QueryByIdAsync("Id", model.RefreshToken)).First();
             var storedRefreshToken = new StoredRefreshToken()
             {
-                Id = refreshToken.Id,
-                CreatedDate = refreshToken.CreatedDate,
                 ExpiryDate = refreshToken.ExpiryDate,
                 IsRevorked = refreshToken.IsRevorked,
-                JwtId = refreshToken.JwtId,
-                UserId = refreshToken.UserId
+                JwtId = refreshToken.JwtId.ToString(),
             };
 
             try
             {
-                var jwtToken = await base.RefreshToken(model.AccessToken, storedRefreshToken);
+                var jwtToken = base.RefreshToken(model.AccessToken, storedRefreshToken);
+
+                await refreshTokenRepository.InsertAsync(new T_RefreshToken()
+                {
+                    Id = jwtToken.RefreshToken,
+                    ExpiryDate = jwtToken.RefreshTokenExpiryDate,
+                    IsRevorked = false,
+                    JwtId = jwtToken.Id.ToGuid(),
+                    UserId = refreshToken.UserId
+                });
+
                 return SucceededResult(jwtToken);
             }
             catch (Exception ex)
             {
+                _logger.LogDebug(ex, "Erro in AccountController.RefreshToken");
                 return FailedResult(ex.Message);
             }
         }
@@ -105,6 +122,7 @@ namespace IceCoffee.Template.WebApi.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogDebug(ex, "Erro in AccountController.SignInWithCookie");
                 return FailedResult("登录失败: " + ex.Message);
             }
         }
@@ -120,12 +138,23 @@ namespace IceCoffee.Template.WebApi.Controllers
             try
             {
                 var userInfo = await SignInHelper.GetUserInfo(HttpContext, model.LoginName, model.PasswordHash);
-                var jwtToken = await GenerateJwtToken(userInfo);
+                var jwtToken = GenerateJwtToken(userInfo.ToClaims());
+
+                var refreshTokenRepository = HttpContext.RequestServices.GetRequiredService<IRefreshTokenRepository>();
+                await refreshTokenRepository.InsertAsync(new T_RefreshToken()
+                {
+                    Id = jwtToken.RefreshToken,
+                    ExpiryDate = jwtToken.RefreshTokenExpiryDate,
+                    IsRevorked = false,
+                    JwtId = jwtToken.Id.ToGuid(),
+                    UserId = userInfo.UserId.ToGuid()
+                });
 
                 return SucceededResult(jwtToken);
             }
             catch (Exception ex)
             {
+                _logger.LogDebug(ex, "Erro in AccountController.SignInWithJwt");
                 return FailedResult("登录失败: " + ex.Message);
             }
         }
@@ -139,6 +168,7 @@ namespace IceCoffee.Template.WebApi.Controllers
             await base.SignOutWithCookie();
             return SucceededResult();
         }
+
         /// <summary>
         /// 通过 JWT 注销
         /// </summary>
@@ -146,9 +176,13 @@ namespace IceCoffee.Template.WebApi.Controllers
         [HttpDelete]
         public new async Task<Response> SignOutWithJwt()
         {
-            await base.SignOutWithJwt();
+            var refreshTokenRepository = HttpContext.RequestServices.GetRequiredService<IRefreshTokenRepository>();
+            var jwtId = base.SignOutWithJwt();
+            await refreshTokenRepository.DeleteByIdAsync("JwtId", jwtId);
+            
             return SucceededResult();
         }
+
         /// <summary>
         /// 获取用户菜单
         /// </summary>
@@ -168,11 +202,14 @@ namespace IceCoffee.Template.WebApi.Controllers
                 return FailedResult("获取失败");
             }
 
-            var hashSet = new HashSet<string>();
+            var hashSet = new HashSet<Guid>();
 
             foreach (var role in userRoles)
             {
-                hashSet.Add(role.RoleId);
+                if (role.RoleId.HasValue)
+                {
+                    hashSet.Add(role.RoleId.Value);
+                }
             }
 
             // 第2步：根据角色Id找到菜单Id

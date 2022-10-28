@@ -22,7 +22,7 @@
         /// <param name="roleId"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<Response<IEnumerable<string>>> GetByRoleId([FromQuery, Required] string roleId)
+        public async Task<Response<IEnumerable<Guid>>> GetByRoleId([FromQuery, Required] Guid roleId)
         {
             var entities = await _userRoleRepository.QueryByIdAsync("Fk_RoleId", roleId);
             return SucceededResult(entities.Select(s => s.UserId));
@@ -34,7 +34,7 @@
         /// <param name="roleName"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<Response<IEnumerable<string>>> GetByRoleName([FromQuery, Required] string roleName)
+        public async Task<Response<IEnumerable<Guid>>> GetByRoleName([FromQuery, Required] string roleName)
         {
             var entities = await _vUserRoleRepository.QueryByIdAsync("RoleName", roleName);
             return SucceededResult(entities.Select(s => s.UserId));

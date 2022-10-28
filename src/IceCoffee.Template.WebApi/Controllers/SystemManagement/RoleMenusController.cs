@@ -29,7 +29,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         /// <param name="roleId"></param>
         /// <returns></returns>
         [HttpGet("{roleId}")]
-        public async Task<Response<IEnumerable<string>>> Get([FromRoute, Required] string roleId)
+        public async Task<Response<IEnumerable<Guid>>> Get([FromRoute, Required, MinLength(1)] Guid roleId)
         {
             var entities = await _roleMenuRepository.QueryByIdAsync("Fk_RoleId", roleId);
 
@@ -43,7 +43,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         /// <param name="menuIds"></param>
         /// <returns></returns>
         [HttpPut("{roleId}")]
-        public async Task<Response> Put([FromRoute] string roleId, [FromBody, Required] string[] menuIds)
+        public async Task<Response> Put([FromRoute] Guid roleId, [FromBody, Required] Guid[] menuIds)
         {
             int count = await _roleRepository.QueryRecordCountAsync("Id=@Id", new { Id = roleId });
             if (count == 0)

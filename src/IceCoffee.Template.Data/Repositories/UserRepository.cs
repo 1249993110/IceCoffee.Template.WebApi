@@ -3,7 +3,7 @@ using IceCoffee.Template.Data.IRepositories;
 
 namespace IceCoffee.Template.Data.Repositories
 {
-    public class UserRepository : SQLiteRepository<T_User>, IUserRepository
+    public class UserRepository : SqlServerRepository<T_User>, IUserRepository
     {
         public UserRepository(DefaultDbConnectionInfo dbConnectionInfo) : base(dbConnectionInfo)
         {
@@ -11,7 +11,7 @@ namespace IceCoffee.Template.Data.Repositories
 
         public async Task<T_User> QueryByLoginNameAsync(string loginName)
         {
-            var result = await base.QueryAsync("Name=@LoginName OR PhoneNumber=@LoginName LIMIT 1", 
+            var result = await base.QueryAsync("Name=@LoginName OR PhoneNumber=@LoginName", 
                 param: new
                 {
                     LoginName = loginName

@@ -5,7 +5,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public string? Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// 
@@ -116,7 +116,7 @@
         /// 
         /// </summary>
         [Required]
-        public string? Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// 

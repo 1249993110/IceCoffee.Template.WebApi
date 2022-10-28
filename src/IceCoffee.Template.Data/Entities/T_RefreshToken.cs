@@ -14,17 +14,18 @@
         /// <summary>
         /// 
         /// </summary>
+        [IgnoreInsert, IgnoreUpdate]
         public DateTime CreatedDate { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public string JwtId { get; set; }
+        public Guid JwtId { get; set; }
 
         /// <summary>
         /// 

@@ -1,5 +1,8 @@
+USE [IceCoffee.Template]
+GO
+
 --创建视图
-CREATE VIEW IF NOT EXISTS V_UserRole AS
+CREATE VIEW V_UserRole AS
 SELECT
 	u.Id AS UserId,
 	u.Name AS UserName,
@@ -14,3 +17,4 @@ LEFT JOIN T_UserRole AS ur ON
 	u.Id = ur.Fk_UserId 
 LEFT JOIN T_Role AS r ON
 	ur.Fk_RoleId = r.Id;
+GO

@@ -1,10 +1,14 @@
+USE [IceCoffee.Template]
+GO
+
 --角色表
-CREATE TABLE IF NOT EXISTS T_Role(
-	Id TEXT NOT NULL PRIMARY KEY,								--角色Id
-	CreatedDate TIMESTAMP NOT NULL DEFAULT (DATETIME(CURRENT_TIMESTAMP,'LOCALTIME')),--创建日期
-	CreatorId TEXT,												--创建者Id
-	ModifierId TEXT,											--修改者Id
-	ModifiedDate TIMESTAMP,										--修改日期
+CREATE TABLE T_Role(
+	Id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),			--角色Id
+	CreatedDate DATETIME NOT NULL DEFAULT GETDATE(),			--创建日期
+	CreatorId UNIQUEIDENTIFIER,									--创建者Id
+	ModifierId UNIQUEIDENTIFIER,								--修改者Id
+	ModifiedDate DATETIME,										--修改日期
 	Name VARCHAR(64) NOT NULL,									--角色名称
 	Description VARCHAR(512)									--说明
 );
+GO

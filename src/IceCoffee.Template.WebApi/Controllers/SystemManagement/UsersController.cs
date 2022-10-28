@@ -61,7 +61,7 @@ namespace HYCX.Power.WebApi.Controllers.SystemManagement
             }
 
             var entity = model.Adapt<T_User>();
-            entity.Id = Guid.NewGuid().ToString();
+            entity.Id = Guid.NewGuid();
 
             string password = StringExtension.FormBase64(model.PasswordHash);
             PBKDF2.HashPassword(password, out string passwordHash, out string passwordSalt);

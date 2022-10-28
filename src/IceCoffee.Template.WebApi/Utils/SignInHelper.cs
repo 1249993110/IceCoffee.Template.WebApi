@@ -67,7 +67,7 @@ namespace IceCoffee.Template.WebApi.Utils
 
             return new UserInfo()
             {
-                UserId = user.Id,
+                UserId = user.Id.ToString(),
                 RoleNames = roleNames,
                 DisplayName = user.DisplayName,
                 Email = user.Email,
