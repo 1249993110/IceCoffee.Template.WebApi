@@ -23,7 +23,7 @@ namespace HYCX.Power.WebApi.Controllers.SystemManagement
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet("{userId}")]
-        public async Task<Response<UserModel>> Get([FromRoute] string userId)
+        public async Task<Response<UserModel>> Get([FromRoute] Guid userId)
         {
             var entity = (await _userRepository.QueryByIdAsync("Id", userId)).FirstOrDefault();
             if (entity == null)
@@ -112,7 +112,7 @@ namespace HYCX.Power.WebApi.Controllers.SystemManagement
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpDelete("{userId}")]
-        public async Task<Response> Delete([FromRoute] string userId)
+        public async Task<Response> Delete([FromRoute] Guid userId)
         {
             int count = await _userRepository.DeleteByIdAsync("Id", userId);
             if (count != 1)
@@ -129,7 +129,7 @@ namespace HYCX.Power.WebApi.Controllers.SystemManagement
         /// <param name="userIds"></param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<Response> Delete([FromBody, Required, MinLength(1)] string[] userIds)
+        public async Task<Response> Delete([FromBody, MinLength(1)] string[] userIds)
         {
             await _userRepository.DeleteBatchByIdsAsync("Id", userIds, true);
             return SucceededResult();

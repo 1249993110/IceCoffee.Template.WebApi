@@ -40,7 +40,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         /// <param name="permissionIds"></param>
         /// <returns></returns>
         [HttpPut("{roleId}")]
-        public async Task<Response> Put([FromRoute] Guid roleId, [FromBody, Required, MinLength(1)] Guid[] permissionIds)
+        public async Task<Response> Put([FromRoute] Guid roleId, [FromBody, MinLength(1)] Guid[] permissionIds)
         {
             int count = await _roleRepository.QueryRecordCountAsync("Id=@Id", new { Id = roleId });
             if (count == 0)
@@ -60,9 +60,10 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
                     });
                 }
 
-                UnitOfWork.Default.EnterContext();
                 try
                 {
+                    UnitOfWork.Default.EnterContext();
+
                     _rolePermissionRepository.DeleteById("Fk_RoleId", roleId);
                     _rolePermissionRepository.InsertBatch(entities);
 

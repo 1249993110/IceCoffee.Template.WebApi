@@ -1,6 +1,4 @@
 ﻿using IceCoffee.Common.Security.Cryptography;
-using IceCoffee.Template.Data.Entities;
-using IceCoffee.Template.Data.Repositories;
 using IceCoffee.Template.WebApi.Extensions;
 using IceCoffee.Template.WebApi.Utils;
 
@@ -179,7 +177,7 @@ namespace IceCoffee.Template.WebApi.Controllers
             var refreshTokenRepository = HttpContext.RequestServices.GetRequiredService<IRefreshTokenRepository>();
             var jwtId = base.SignOutWithJwt();
             await refreshTokenRepository.DeleteByIdAsync("JwtId", jwtId);
-            
+
             return SucceededResult();
         }
 
@@ -189,7 +187,7 @@ namespace IceCoffee.Template.WebApi.Controllers
         [HttpGet]
         public async Task<Response<IEnumerable<MenuTreeModel>>> UserMenus()
         {
-            var userId = HttpContext.RequestServices.GetRequiredService<UserInfo>().UserId;
+            var userId = base.UserInfo.UserId;
             var menuRepository = HttpContext.RequestServices.GetRequiredService<IMenuRepository>();
             var vUserRoleRepository = HttpContext.RequestServices.GetRequiredService<IVUserRoleRepository>();
             var roleMenuRepository = HttpContext.RequestServices.GetRequiredService<IRoleMenuRepository>();

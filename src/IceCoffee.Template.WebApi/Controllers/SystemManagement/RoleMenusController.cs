@@ -29,7 +29,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         /// <param name="roleId"></param>
         /// <returns></returns>
         [HttpGet("{roleId}")]
-        public async Task<Response<IEnumerable<Guid>>> Get([FromRoute, Required, MinLength(1)] Guid roleId)
+        public async Task<Response<IEnumerable<Guid>>> Get([FromRoute] Guid roleId)
         {
             var entities = await _roleMenuRepository.QueryByIdAsync("Fk_RoleId", roleId);
 
@@ -43,7 +43,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         /// <param name="menuIds"></param>
         /// <returns></returns>
         [HttpPut("{roleId}")]
-        public async Task<Response> Put([FromRoute] Guid roleId, [FromBody, Required] Guid[] menuIds)
+        public async Task<Response> Put([FromRoute] Guid roleId, [FromBody, MinLength(1)] Guid[] menuIds)
         {
             int count = await _roleRepository.QueryRecordCountAsync("Id=@Id", new { Id = roleId });
             if (count == 0)
@@ -63,9 +63,10 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
                     });
                 }
 
-                UnitOfWork.Default.EnterContext();
                 try
                 {
+                    UnitOfWork.Default.EnterContext();
+
                     _roleMenuRepository.DeleteById("Fk_RoleId", roleId);
                     _roleMenuRepository.InsertBatch(entities);
 

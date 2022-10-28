@@ -4,7 +4,7 @@
     /// 角色下的用户管理
     /// </summary>
     [Area(nameof(SystemManagement))]
-    [Route("api/[area]/[controller]/[action]")]
+    [Route("api/[area]/[controller]")]
     public class RoleUsersController : ApiControllerBase
     {
         private readonly IUserRoleRepository _userRoleRepository;
@@ -17,27 +17,15 @@
         }
 
         /// <summary>
-        /// 通过角色Id获取用户
+        /// 通过角色Id或名称获取用户
         /// </summary>
-        /// <param name="roleId"></param>
+        /// <param name="roleIdOrName"></param>
         /// <returns></returns>
-        [HttpGet]
-        public async Task<Response<IEnumerable<Guid>>> GetByRoleId([FromQuery, Required] Guid roleId)
+        [HttpGet("{roleIdOrName}")]
+        public async Task<Response<IEnumerable<Guid>>> GetByRoleId([FromRoute] string roleIdOrName)
         {
-            var entities = await _userRoleRepository.QueryByIdAsync("Fk_RoleId", roleId);
-            return SucceededResult(entities.Select(s => s.UserId));
-        }
-
-        /// <summary>
-        /// 通过角色名称获取用户
-        /// </summary>
-        /// <param name="roleName"></param>
-        /// <returns></returns>
-        [HttpGet]
-        public async Task<Response<IEnumerable<Guid>>> GetByRoleName([FromQuery, Required] string roleName)
-        {
-            var entities = await _vUserRoleRepository.QueryByIdAsync("RoleName", roleName);
-            return SucceededResult(entities.Select(s => s.UserId));
+            var data = await _vUserRoleRepository.QueryUserIdByRoleIdOrNameAsync(roleIdOrName);
+            return SucceededResult(data);
         }
     }
 }

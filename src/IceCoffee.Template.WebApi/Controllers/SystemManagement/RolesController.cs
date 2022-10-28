@@ -22,7 +22,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         /// <param name="roleId"></param>
         /// <returns></returns>
         [HttpGet("{roleId}")]
-        public async Task<Response<T_Role>> Get([FromRoute] string roleId)
+        public async Task<Response<T_Role>> Get([FromRoute] Guid roleId)
         {
             var entity = (await _roleRepository.QueryByIdAsync("Id", roleId)).FirstOrDefault();
             if (entity == null)
@@ -90,7 +90,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         /// <param name="roleId"></param>
         /// <returns></returns>
         [HttpDelete("{roleId}")]
-        public async Task<Response> Delete([FromRoute] string roleId)
+        public async Task<Response> Delete([FromRoute] Guid roleId)
         {
             int count = await _roleRepository.DeleteByIdAsync("Id", roleId);
             if (count != 1)
@@ -107,7 +107,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         /// <param name="roleIds"></param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<Response> Delete([FromBody, Required, MinLength(1)] string[] roleIds)
+        public async Task<Response> Delete([FromBody, MinLength(1)] Guid[] roleIds)
         {
             await _roleRepository.DeleteBatchByIdsAsync("Id", roleIds, true);
             return SucceededResult();

@@ -23,12 +23,12 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         /// <param name="menuId"></param>
         /// <returns></returns>
         [HttpGet("{menuId}")]
-        public async Task<Response<T_Menu>> Get([FromRoute] string menuId)
+        public async Task<Response<T_Menu>> Get([FromRoute] Guid menuId)
         {
             var entity = (await _menuRepository.QueryByIdAsync("Id", menuId)).FirstOrDefault();
             if (entity == null)
             {
-                return FailedResult("获取失败");
+                return FailedResult($"获取失败, 菜单Id: {menuId} 不存在");
             }
 
             return SucceededResult(entity);
@@ -90,7 +90,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         /// <param name="menuId"></param>
         /// <returns></returns>
         [HttpDelete("{menuId}")]
-        public async Task<Response> Delete([FromRoute] string menuId)
+        public async Task<Response> Delete([FromRoute] Guid menuId)
         {
             int count = await _menuRepository.DeleteByIdAsync("Id", menuId);
             if (count != 1)
@@ -107,7 +107,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         /// <param name="menuIds"></param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<Response> Delete([FromBody, Required, MinLength(1)] string[] menuIds)
+        public async Task<Response> Delete([FromBody, MinLength(1)] Guid[] menuIds)
         {
             await _menuRepository.DeleteBatchByIdsAsync("Id", menuIds, true);
             return SucceededResult();
