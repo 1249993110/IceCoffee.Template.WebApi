@@ -101,7 +101,7 @@ namespace IceCoffee.Template.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogDebug(ex, "Erro in AccountController.RefreshToken");
+                _logger.LogDebug(ex, "Error in AccountController.RefreshToken");
                 return FailedResult(ex.Message);
             }
         }
@@ -122,7 +122,7 @@ namespace IceCoffee.Template.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogDebug(ex, "Erro in AccountController.SignInWithCookie");
+                _logger.LogDebug(ex, "Error in AccountController.SignInWithCookie");
                 return FailedResult("登录失败: " + ex.Message);
             }
         }
@@ -154,7 +154,7 @@ namespace IceCoffee.Template.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogDebug(ex, "Erro in AccountController.SignInWithJwt");
+                _logger.LogDebug(ex, "Error in AccountController.SignInWithJwt");
                 return FailedResult("登录失败: " + ex.Message);
             }
         }
