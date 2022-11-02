@@ -26,7 +26,6 @@
         /// <summary>
         /// 
         /// </summary>
-        [Required]
         public string? Url { get; set; }
 
         /// <summary>
