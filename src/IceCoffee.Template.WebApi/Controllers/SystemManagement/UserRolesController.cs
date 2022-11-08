@@ -61,7 +61,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
                 {
                     UnitOfWork.Default.EnterContext();
 
-                    _userRoleRepository.DeleteById("Id", userId);
+                    _userRoleRepository.DeleteById("Fk_UserId", userId);
                     _userRoleRepository.InsertBatch(entities);
 
                     UnitOfWork.Default.SaveChanges();
@@ -74,7 +74,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
             }
             else
             {
-                await _userRoleRepository.DeleteByIdAsync("Id", userId);
+                await _userRoleRepository.DeleteByIdAsync("Fk_UserId", userId);
             }
 
             return SucceededResult();

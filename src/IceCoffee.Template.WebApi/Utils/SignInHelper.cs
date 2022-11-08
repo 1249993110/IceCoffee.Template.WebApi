@@ -60,6 +60,12 @@ namespace IceCoffee.Template.WebApi.Utils
 
             var vUserRoles = await vUserRoleRepository.QueryByIdAsync("UserId", user.Id);
             var roleIds = vUserRoles.Select(s => s.RoleId);
+
+            if(roleIds.Any() == false)
+            {
+                throw new Exception($"用户: {loginName} 尚未分配角色");
+            }
+
             var roleNames = vUserRoles.Select(s => s.RoleName);
 
             var vRolePermission = (await vRolePermissionRepository.QueryByIdsAsync("RoleId", roleIds));

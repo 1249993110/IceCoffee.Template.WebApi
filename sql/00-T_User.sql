@@ -6,13 +6,13 @@ CREATE TABLE  T_User(
 	Id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),			--用户Id
 	CreatedDate DATETIME NOT NULL DEFAULT GETDATE(),			--创建日期
 	Name VARCHAR(64) NOT NULL,									--用户名称, 不允许使用全数字或邮箱格式
-	DisplayName VARCHAR(64) NOT NULL,							--显示名称
+	DisplayName NVARCHAR(64) NOT NULL,							--显示名称
 	Email VARCHAR(256),											--电子邮件
 	PasswordHash VARCHAR(512) NOT NULL,							--密码哈希值
 	PasswordSalt VARCHAR(512) NOT NULL,							--密码盐值
 	PhoneNumber VARCHAR(16),									--电话号码
-	Address VARCHAR(512),										--地址
-	Description VARCHAR(512),									--说明
+	Address NVARCHAR(512),										--地址
+	Description NVARCHAR(512),									--说明
 	LastLoginTime DATETIME,										--上次登录时间
 	LastLoginIp VARCHAR(64),									--上次登录Ip
 	LoginEnabled BIT NOT NULL,									--是否允许登录

@@ -5,14 +5,14 @@ GO
 CREATE TABLE  T_User(
 	Id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),			--用户Id
 	CreatedDate DATETIME NOT NULL DEFAULT GETDATE(),			--创建日期
-	Name VARCHAR(64) NOT NULL,									--用户名称
-	DisplayName VARCHAR(64) NOT NULL,							--显示名称
+	Name VARCHAR(64) NOT NULL,									--用户名称, 不允许使用全数字或邮箱格式
+	DisplayName NVARCHAR(64) NOT NULL,							--显示名称
 	Email VARCHAR(256),											--电子邮件
 	PasswordHash VARCHAR(512) NOT NULL,							--密码哈希值
 	PasswordSalt VARCHAR(512) NOT NULL,							--密码盐值
 	PhoneNumber VARCHAR(16),									--电话号码
-	Address VARCHAR(512),										--地址
-	Description VARCHAR(512),									--说明
+	Address NVARCHAR(512),										--地址
+	Description NVARCHAR(512),									--说明
 	LastLoginTime DATETIME,										--上次登录时间
 	LastLoginIp VARCHAR(64),									--上次登录Ip
 	LoginEnabled BIT NOT NULL,									--是否允许登录
@@ -35,8 +35,8 @@ CREATE TABLE T_Role(
 	CreatorId UNIQUEIDENTIFIER,									--创建者Id
 	ModifierId UNIQUEIDENTIFIER,								--修改者Id
 	ModifiedDate DATETIME,										--修改日期
-	Name VARCHAR(64) NOT NULL,									--角色名称
-	Description VARCHAR(512)									--说明
+	Name NVARCHAR(64) NOT NULL,									--角色名称
+	Description NVARCHAR(512)									--说明
 );
 GO
 USE [IceCoffee.Template]
@@ -62,13 +62,13 @@ CREATE TABLE T_Menu(
 	ModifierId UNIQUEIDENTIFIER,								--修改者Id
 	ModifiedDate DATETIME,										--修改日期
 	ParentId UNIQUEIDENTIFIER,									--父菜单Id
-	Name VARCHAR(512) NOT NULL,									--菜单名称
+	Name NVARCHAR(512) NOT NULL,									--菜单名称
 	Icon VARCHAR(32),											--菜单图标
 	Sort INTEGER NOT NULL,										--排序
 	Url VARCHAR(512),											--菜单Url
 	IsEnabled BIT NOT NULL,										--是否启用
 	IsExternalLink BIT NOT NULL DEFAULT 0,						--是否为外链
-	Description VARCHAR(512)									--说明
+	Description NVARCHAR(512)									--说明
 );
 GO
 USE [IceCoffee.Template]
@@ -153,7 +153,7 @@ GO
 CREATE TABLE T_RefreshToken(
 	Id CHAR(64) NOT NULL PRIMARY KEY,							--Refresh Token
 	CreatedDate DATETIME NOT NULL DEFAULT GETDATE(),			--创建日期
-	Fk_UserId UNIQUEIDENTIFIER,									--用户Id
+	Fk_UserId UNIQUEIDENTIFIER NOT NULL,						--用户Id
 	JwtId UNIQUEIDENTIFIER NOT NULL,							--使用 JwtId 映射到对应的 token
 	IsRevorked BIT NOT NULL,									--是否出于安全原因已将其撤销
 	ExpiryDate DATETIME NOT NULL,								--Refresh Token 的生命周期很长，可以长达数月。注意一个Refresh Token只能被用来刷新一次
@@ -176,12 +176,12 @@ INSERT INTO T_UserRole(Fk_UserId,Fk_RoleId) VALUES((SELECT Id FROM T_User WHERE 
 INSERT INTO T_Permission(Id,Area) VALUES('F3502BF4-0AFB-93B3-0E1D-43786DF94AB1','SystemManagement');
 INSERT INTO T_RolePermission(Fk_RoleId,Fk_PermissionId) VALUES((SELECT Id FROM T_Role WHERE Name='Administrator'),(SELECT Id FROM T_Permission WHERE Area='SystemManagement'));
 
-INSERT INTO T_Menu(Id,ParentId,Name,Sort,Url,IsEnabled) VALUES('F1FB0526-CB1E-FCA8-2754-5868EFF0194B',null,'主页',0,'/home',1);
-INSERT INTO T_Menu(Id,ParentId,Name,Sort,Url,IsEnabled) VALUES('BB106982-0F6E-BFD8-F668-FE622FA6195A',null,'系统管理',99,null,1);
-INSERT INTO T_Menu(Id,ParentId,Name,Sort,Url,IsEnabled) VALUES('ABC2607E-3EA6-D730-BB2C-7C8B3C213E88',(SELECT Id FROM T_Menu WHERE Name='系统管理'),'用户管理',1,'/system-management/users',1);
-INSERT INTO T_Menu(Id,ParentId,Name,Sort,Url,IsEnabled) VALUES('32B78DAF-CCAF-0AAE-2AF8-143ECD878D58',(SELECT Id FROM T_Menu WHERE Name='系统管理'),'角色管理',2,'/system-management/roles',1);
-INSERT INTO T_Menu(Id,ParentId,Name,Sort,Url,IsEnabled) VALUES('2F2C047E-716B-417E-6AE8-188E1F3AA684',(SELECT Id FROM T_Menu WHERE Name='系统管理'),'菜单管理',3,'/system-management/menus',1);
-INSERT INTO T_Menu(Id,ParentId,Name,Sort,Url,IsEnabled) VALUES('4AF9C52E-DA74-116C-4EA3-95DBE373B0D5',(SELECT Id FROM T_Menu WHERE Name='系统管理'),'权限管理',4,'/system-management/permissions',1);
-INSERT INTO T_Menu(Id,ParentId,Name,Sort,Url,IsEnabled,IsExternalLink) VALUES('3001E9D1-17EB-2B7C-FAE2-7724B74FD7CA',null,'接口文档',100,'/swagger/index.html',1,1);
+INSERT INTO T_Menu(Id,ParentId,Name,Icon,Sort,Url,IsEnabled) VALUES('F1FB0526-CB1E-FCA8-2754-5868EFF0194B',null,'主页','home',0,'/home',1);
+INSERT INTO T_Menu(Id,ParentId,Name,Icon,Sort,Url,IsEnabled) VALUES('BB106982-0F6E-BFD8-F668-FE622FA6195A',null,'系统管理','s-management',99,null,1);
+INSERT INTO T_Menu(Id,ParentId,Name,Icon,Sort,Url,IsEnabled) VALUES('ABC2607E-3EA6-D730-BB2C-7C8B3C213E88',(SELECT Id FROM T_Menu WHERE Name='系统管理'),'用户管理','user',1,'/system-management/users',1);
+INSERT INTO T_Menu(Id,ParentId,Name,Icon,Sort,Url,IsEnabled) VALUES('32B78DAF-CCAF-0AAE-2AF8-143ECD878D58',(SELECT Id FROM T_Menu WHERE Name='系统管理'),'角色管理','role',2,'/system-management/roles',1);
+INSERT INTO T_Menu(Id,ParentId,Name,Icon,Sort,Url,IsEnabled) VALUES('2F2C047E-716B-417E-6AE8-188E1F3AA684',(SELECT Id FROM T_Menu WHERE Name='系统管理'),'菜单管理','menu',3,'/system-management/menus',1);
+INSERT INTO T_Menu(Id,ParentId,Name,Icon,Sort,Url,IsEnabled) VALUES('4AF9C52E-DA74-116C-4EA3-95DBE373B0D5',(SELECT Id FROM T_Menu WHERE Name='系统管理'),'权限管理','permission',4,'/system-management/permissions',1);
+INSERT INTO T_Menu(Id,ParentId,Name,Icon,Sort,Url,IsEnabled,IsExternalLink) VALUES('3001E9D1-17EB-2B7C-FAE2-7724B74FD7CA',null,'接口文档','document',100,'/swagger/index.html',1,1);
 
 INSERT INTO T_RoleMenu(Fk_RoleId,Fk_MenuId) SELECT r.Id AS Fk_RoleId, m.Id AS Fk_MenuId FROM T_Role AS r LEFT JOIN T_Menu AS m ON r.Name='Administrator';

@@ -1,5 +1,6 @@
 ﻿using IceCoffee.Common.Security.Cryptography;
 using Mapster;
+using System.Text.RegularExpressions;
 
 namespace HYCX.Power.WebApi.Controllers.SystemManagement
 {
@@ -54,6 +55,16 @@ namespace HYCX.Power.WebApi.Controllers.SystemManagement
         [HttpPost]
         public async Task<Response> Post([FromBody] UserAddModel model)
         {
+            string password = StringExtension.FormBase64(model.PasswordHash);
+            try
+            {
+                CheckPassword(password);
+            }
+            catch (Exception ex)
+            {
+                return FailedResult(ex.Message);
+            }
+
             int count = await _userRepository.QueryRecordCountAsync("Name=@Name", new { model.Name });
             if (count != 0)
             {
@@ -63,13 +74,20 @@ namespace HYCX.Power.WebApi.Controllers.SystemManagement
             var entity = model.Adapt<T_User>();
             entity.Id = Guid.NewGuid();
 
-            string password = StringExtension.FormBase64(model.PasswordHash);
             PBKDF2.HashPassword(password, out string passwordHash, out string passwordSalt);
             entity.PasswordHash = passwordHash;
             entity.PasswordSalt = passwordSalt;
 
             await _userRepository.InsertAsync(entity);
             return SucceededResult();
+        }
+
+        private static void CheckPassword(string password)
+        {
+            if (Regex.IsMatch(password, @"^(?=.*[A-Za-z])(?=.*\d)(?=.*[.?`~!@#$%^&*()_])[A-Za-z\d.?`~!@#$%^&*()_]{8,16}$") == false)
+            {
+                throw new Exception("修改失败, 密码必须是8-16位英文字母、数字、字符组合");
+            }
         }
 
         /// <summary>
@@ -93,16 +111,49 @@ namespace HYCX.Power.WebApi.Controllers.SystemManagement
                 return FailedResult($"修改失败, 用户名称: {model.Name} 已存在");
             }
 
-            model.Adapt(entity);
-            if (string.IsNullOrEmpty(model.PasswordHash) == false)
-            {
-                string password = StringExtension.FormBase64(model.PasswordHash);
-                PBKDF2.HashPassword(password, out string passwordHash, out string passwordSalt);
-                entity.PasswordHash = passwordHash;
-                entity.PasswordSalt = passwordSalt;
-            }
+            entity.Name = model.Name;
+            entity.DisplayName = model.DisplayName;
+            entity.Email = model.Email;
+            entity.PhoneNumber = model.PhoneNumber;
+            entity.Description = model.Description;
+            entity.LoginEnabled = model.LoginEnabled;
+            entity.Address = model.Address;
 
             await _userRepository.UpdateAsync(entity);
+            return SucceededResult();
+        }
+
+        /// <summary>
+        /// 修改用户密码
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPut("{userId}")]
+        public async Task<Response> PutPassword([FromRoute] Guid userId,[FromBody] PasswordModel model)
+        {
+            string password = StringExtension.FormBase64(model.PasswordHash);
+            try
+            {
+                CheckPassword(password);
+            }
+            catch (Exception ex)
+            {
+                return FailedResult(ex.Message);
+            }
+
+            var entity = (await _userRepository.QueryByIdAsync("Id", userId)).FirstOrDefault();
+            if (entity == null)
+            {
+                return FailedResult($"修改失败, 用户Id: {userId} 不存在");
+            }
+
+            PBKDF2.HashPassword(password, out string passwordHash, out string passwordSalt);
+            entity.PasswordHash = passwordHash;
+            entity.PasswordSalt = passwordSalt;
+
+            await _userRepository.UpdateAsync(entity);
+
             return SucceededResult();
         }
 

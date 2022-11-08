@@ -49,6 +49,17 @@
         public string? PhoneNumber { get; set; }
     }
 
+    public class PasswordModel
+    {
+        [Required]
+        public string PasswordHash { get; set; }
+
+        public PasswordModel(string passwordHash)
+        {
+            PasswordHash = passwordHash;
+        }
+    }
+
     public class UserEditModel
     {
         /// <summary>
@@ -88,10 +99,6 @@
         /// </summary>
         [Required]
         public string? Name { get; set; }
-        /// <summary>
-        ///
-        /// </summary>
-        public string? PasswordHash { get; set; }
 
         /// <summary>
         ///

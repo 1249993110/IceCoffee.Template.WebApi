@@ -8,7 +8,7 @@ CREATE TABLE T_Role(
 	CreatorId UNIQUEIDENTIFIER,									--创建者Id
 	ModifierId UNIQUEIDENTIFIER,								--修改者Id
 	ModifiedDate DATETIME,										--修改日期
-	Name VARCHAR(64) NOT NULL,									--角色名称
-	Description VARCHAR(512)									--说明
+	Name NVARCHAR(64) NOT NULL,									--角色名称
+	Description NVARCHAR(512)									--说明
 );
 GO
