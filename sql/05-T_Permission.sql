@@ -9,6 +9,7 @@ CREATE TABLE T_Permission(
 	ModifierId UNIQUEIDENTIFIER,								--修改者Id
 	ModifiedDate DATETIME,										--修改日期
 	Area VARCHAR(512) NOT NULL,									--授权区域
+	IsEnabled BIT NOT NULL,										--是否启用
 	Description VARCHAR(512)									--说明
 );
 GO

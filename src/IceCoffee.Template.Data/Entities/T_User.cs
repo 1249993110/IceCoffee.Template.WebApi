@@ -55,6 +55,11 @@
         /// <summary>
         /// 
         /// </summary>
+        public bool IsEnabled { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public string Description { get; set; }
 
         /// <summary>
@@ -66,11 +71,6 @@
         /// 
         /// </summary>
         public string LastLoginIp { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool LoginEnabled { get; set; }
 
         /// <summary>
         /// 

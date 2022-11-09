@@ -9,6 +9,7 @@ CREATE TABLE T_Role(
 	ModifierId UNIQUEIDENTIFIER,								--修改者Id
 	ModifiedDate DATETIME,										--修改日期
 	Name NVARCHAR(64) NOT NULL,									--角色名称
+	IsEnabled BIT NOT NULL,										--是否启用
 	Description NVARCHAR(512)									--说明
 );
 GO

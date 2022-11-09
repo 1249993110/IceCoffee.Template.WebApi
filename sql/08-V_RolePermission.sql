@@ -6,8 +6,10 @@ CREATE VIEW V_RolePermission AS
 SELECT
 	r.Id AS RoleId,
 	r.Name AS RoleName,
+	r.IsEnabled AS RoleEnabled,
 	p.Id AS PermissionId,
-	p.Area
+	p.Area,
+	p.IsEnabled AS PermissionEnabled
 FROM
 	T_Role AS r
 LEFT JOIN T_RolePermission AS rp ON

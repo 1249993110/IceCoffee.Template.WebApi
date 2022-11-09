@@ -31,7 +31,7 @@
         /// <summary>
         ///
         /// </summary>
-        public bool LoginEnabled { get; set; }
+        public bool IsEnabled { get; set; }
 
         /// <summary>
         ///
@@ -92,7 +92,7 @@
         /// <summary>
         ///
         /// </summary>
-        public bool LoginEnabled { get; set; }
+        public bool IsEnabled { get; set; }
 
         /// <summary>
         ///
@@ -150,7 +150,7 @@
         /// <summary>
         ///
         /// </summary>
-        public bool LoginEnabled { get; set; }
+        public bool IsEnabled { get; set; }
 
         /// <summary>
         ///

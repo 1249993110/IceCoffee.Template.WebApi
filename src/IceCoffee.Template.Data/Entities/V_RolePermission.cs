@@ -25,5 +25,14 @@
         /// </summary>
         public string Area { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool RoleEnabled { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool PermissionEnabled { get; set; }
     }
 }

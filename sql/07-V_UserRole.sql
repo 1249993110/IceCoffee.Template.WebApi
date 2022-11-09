@@ -6,11 +6,18 @@ CREATE VIEW V_UserRole AS
 SELECT
 	u.Id AS UserId,
 	u.Name AS UserName,
+	u.CreatedDate,
 	u.DisplayName,
-	u.Email,
 	u.PhoneNumber,
+	u.Email,
+	u.LastLoginTime,
+	u.LastLoginIp,
+	u.Address,
+	u.Description,
+	u.IsEnabled AS UserEnabled,
 	r.Id AS RoleId,
-	r.Name AS RoleName
+	r.Name AS RoleName,
+	r.IsEnabled AS RoleEnabled
 FROM
 	T_User AS u
 LEFT JOIN T_UserRole AS ur ON

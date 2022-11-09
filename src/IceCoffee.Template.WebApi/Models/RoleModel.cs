@@ -11,12 +11,12 @@
         /// <summary>
         /// 
         /// </summary>
-        public string? Description { get; set; }
+        public bool IsEnabled { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsEnabled { get; set; }
+        public string? Description { get; set; }
     }
 
     public class RoleEditModel : RoleAddModel

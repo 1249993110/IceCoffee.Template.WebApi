@@ -7,6 +7,12 @@
         /// </summary>
         [Required]
         public string? Area { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsEnabled { get; set; }
+
         /// <summary>
         /// 
         /// </summary>

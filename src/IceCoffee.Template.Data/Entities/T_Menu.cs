@@ -60,12 +60,12 @@
         /// <summary>
         /// 
         /// </summary>
-        public bool IsEnabled { get; set; }
+        public bool IsExternalLink { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsExternalLink { get; set; }
+        public bool IsEnabled { get; set; }
 
         /// <summary>
         /// 

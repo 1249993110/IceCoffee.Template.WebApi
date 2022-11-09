@@ -1,13 +1,13 @@
 USE [IceCoffee.Template]
 GO
 
-INSERT INTO T_User(Id,Name,DisplayName,PasswordHash,PasswordSalt,LoginEnabled) VALUES('6474EFE2-7C58-9C1B-8A89-88C898CB543A','admin','系统管理员','Xg9+QTHDb5Mw9vaEe9q8PqvlZqE=','NCPuMnV9WlfswrYk42cENwKP2mU/K9IJ',1);
+INSERT INTO T_User(Id,Name,DisplayName,PasswordHash,PasswordSalt,IsEnabled) VALUES('6474EFE2-7C58-9C1B-8A89-88C898CB543A','admin','系统管理员','Xg9+QTHDb5Mw9vaEe9q8PqvlZqE=','NCPuMnV9WlfswrYk42cENwKP2mU/K9IJ',1);
 
-INSERT INTO T_Role(Id,Name,Description) VALUES('929A7D9F-AEE3-8634-A009-4C12259E09AD','Administrator','管理员');
+INSERT INTO T_Role(Id,Name,IsEnabled,Description) VALUES('929A7D9F-AEE3-8634-A009-4C12259E09AD','Administrator',1,'管理员');
 INSERT INTO T_UserRole(Fk_UserId,Fk_RoleId) VALUES((SELECT Id FROM T_User WHERE Name='admin'),(SELECT Id FROM T_Role WHERE Name='Administrator'));
 
 
-INSERT INTO T_Permission(Id,Area) VALUES('F3502BF4-0AFB-93B3-0E1D-43786DF94AB1','SystemManagement');
+INSERT INTO T_Permission(Id,Area,IsEnabled) VALUES('F3502BF4-0AFB-93B3-0E1D-43786DF94AB1','SystemManagement',1);
 INSERT INTO T_RolePermission(Fk_RoleId,Fk_PermissionId) VALUES((SELECT Id FROM T_Role WHERE Name='Administrator'),(SELECT Id FROM T_Permission WHERE Area='SystemManagement'));
 
 INSERT INTO T_Menu(Id,ParentId,Name,Icon,Sort,Url,IsEnabled) VALUES('F1FB0526-CB1E-FCA8-2754-5868EFF0194B',null,'主页','home',0,'/home',1);

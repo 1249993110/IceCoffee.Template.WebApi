@@ -15,7 +15,7 @@ CREATE TABLE  T_User(
 	Description NVARCHAR(512),									--说明
 	LastLoginTime DATETIME,										--上次登录时间
 	LastLoginIp VARCHAR(64),									--上次登录Ip
-	LoginEnabled BIT NOT NULL,									--是否允许登录
+	IsEnabled BIT NOT NULL,										--是否启用
 	LockoutEndDate DATETIME,									--锁定结束日期
     AccessFailedCount INTEGER NOT NULL DEFAULT 0				--访问失败次数
 );

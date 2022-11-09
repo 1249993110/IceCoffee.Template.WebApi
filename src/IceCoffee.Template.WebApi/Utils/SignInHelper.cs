@@ -26,8 +26,8 @@ namespace IceCoffee.Template.WebApi.Utils
                 throw new Exception("用户不存在");
             }
 
-            // 检查登录允许
-            if (user.LoginEnabled == false)
+            // 检查用户是否启用
+            if (user.IsEnabled == false)
             {
                 throw new Exception("不允许登录, 请联系系统管理员");
             }
@@ -58,18 +58,13 @@ namespace IceCoffee.Template.WebApi.Utils
             user.LastLoginIp = httpContext.GetRemoteIpAddress();
             await userRepository.UpdateAsync(user);
 
-            var vUserRoles = await vUserRoleRepository.QueryByIdAsync("UserId", user.Id);
-            var roleIds = vUserRoles.Select(s => s.RoleId);
-
-            if(roleIds.Any() == false)
+            var roleNames = await vUserRoleRepository.QueryRoleNamesByUserId(user.Id);
+            if (roleNames.Any() == false)
             {
                 throw new Exception($"用户: {loginName} 尚未分配角色");
             }
 
-            var roleNames = vUserRoles.Select(s => s.RoleName);
-
-            var vRolePermission = (await vRolePermissionRepository.QueryByIdsAsync("RoleId", roleIds));
-            var areas = vRolePermission.Select(s => s.Area).Distinct();
+            var areas = await vRolePermissionRepository.QueryAreasByRoleNames(roleNames);
 
             return new UserInfo()
             {

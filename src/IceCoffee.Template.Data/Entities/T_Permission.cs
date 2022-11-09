@@ -40,6 +40,11 @@
         /// <summary>
         /// 
         /// </summary>
+        public bool IsEnabled { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public string Description { get; set; }
 
     }

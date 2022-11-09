@@ -116,7 +116,7 @@ namespace HYCX.Power.WebApi.Controllers.SystemManagement
             entity.Email = model.Email;
             entity.PhoneNumber = model.PhoneNumber;
             entity.Description = model.Description;
-            entity.LoginEnabled = model.LoginEnabled;
+            entity.IsEnabled = model.IsEnabled;
             entity.Address = model.Address;
 
             await _userRepository.UpdateAsync(entity);
