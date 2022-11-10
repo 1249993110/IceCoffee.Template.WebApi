@@ -15,7 +15,7 @@ SELECT
 	m.Url,
 	m.IsEnabled AS MenuEnabled,
 	m.IsExternalLink,
-	m.Description AS MenuDescription,
+	m.Description AS MenuDescription
 FROM
 	T_Role AS r
 LEFT JOIN T_RoleMenu AS rm ON
