@@ -33,6 +33,6 @@
         /// <summary>
         /// 
         /// </summary>
-        public bool PermissionEnabled { get; set; }
+        public bool? PermissionEnabled { get; set; }
     }
 }

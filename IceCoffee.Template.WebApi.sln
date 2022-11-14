@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IceCoffee.Template.WebApi",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IceCoffee.Template.Data", "src\IceCoffee.Template.Data\IceCoffee.Template.Data.csproj", "{54F351AA-6CA9-4AE0-AC37-06D860A2604B}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IceCoffee.DbCore", "..\IceCoffee.DbCore\IceCoffee.DbCore\IceCoffee.DbCore.csproj", "{CF6F5A3D-BA94-4522-857B-768C8FBF80A0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{54F351AA-6CA9-4AE0-AC37-06D860A2604B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{54F351AA-6CA9-4AE0-AC37-06D860A2604B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{54F351AA-6CA9-4AE0-AC37-06D860A2604B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF6F5A3D-BA94-4522-857B-768C8FBF80A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF6F5A3D-BA94-4522-857B-768C8FBF80A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF6F5A3D-BA94-4522-857B-768C8FBF80A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF6F5A3D-BA94-4522-857B-768C8FBF80A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

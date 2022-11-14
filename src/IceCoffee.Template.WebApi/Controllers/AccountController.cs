@@ -188,53 +188,25 @@ namespace IceCoffee.Template.WebApi.Controllers
         public async Task<Response<IEnumerable<MenuTreeModel>>> UserMenus()
         {
             var userId = base.UserInfo.UserId;
-            var menuRepository = HttpContext.RequestServices.GetRequiredService<IMenuRepository>();
             var vUserRoleRepository = HttpContext.RequestServices.GetRequiredService<IVUserRoleRepository>();
-            var roleMenuRepository = HttpContext.RequestServices.GetRequiredService<IRoleMenuRepository>();
+            var vRoleMenuRepository = HttpContext.RequestServices.GetRequiredService<IVRoleMenuRepository>();
 
             // 第1步：根据用户找到所属角色
-            var userRoles = await vUserRoleRepository.QueryByIdAsync("UserId", userId);
+            var roleIds = await vUserRoleRepository.QueryEnabledRoleIdsByUserId(userId.ToGuid());
 
-            if (userRoles.Any() == false)
+            if (roleIds.Any() == false)
             {
-                return FailedResult("获取失败");
+                return FailedResult($"用户: {base.UserInfo.UserName} 尚未分配角色");
             }
 
-            var hashSet = new HashSet<Guid>();
-
-            foreach (var role in userRoles)
-            {
-                if (role.RoleId.HasValue)
-                {
-                    hashSet.Add(role.RoleId.Value);
-                }
-            }
-
-            // 第2步：根据角色Id找到菜单Id
-            var roleMenus = await roleMenuRepository.QueryByIdsAsync("Fk_RoleId", hashSet);
+            // 第2步：根据角色Id找到菜单
+            var roleMenus = await vRoleMenuRepository.QueryEnabledByRoleIds(roleIds);
             if (roleMenus.Any() == false)
             {
-                return FailedResult("获取失败");
+                return FailedResult($"用户: {base.UserInfo.UserName} 所关联的角色尚未分配菜单");
             }
 
-            hashSet.Clear();
-
-            foreach (var item in roleMenus)
-            {
-                hashSet.Add(item.MenuId);
-            }
-
-            // 第3步：获取菜单
-            var menus = await menuRepository.QueryByIdsAsync("Id", hashSet);
-            // 过滤禁用的菜单
-            menus = menus.Where(p => p.IsEnabled);
-
-            if (menus.Any() == false)
-            {
-                return FailedResult("获取失败");
-            }
-
-            return SucceededResult(menus.ToTreeModel());
+            return SucceededResult(roleMenus.ToTreeModel());
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Mapster;
+﻿using IceCoffee.DbCore;
+using Mapster;
 
 namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
 {
@@ -10,14 +11,24 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
     public class RolesController : ApiControllerBase
     {
         private readonly IRoleRepository _roleRepository;
+        private readonly IRoleMenuRepository _roleMenuRepository; 
+        private readonly IRolePermissionRepository _rolePermissionRepository;
+        private readonly IPermissionRepository _permissionRepository;
 
-        public RolesController(IRoleRepository roleRepository)
+        public RolesController(
+            IRoleRepository roleRepository,
+            IRoleMenuRepository roleMenuRepository,
+            IRolePermissionRepository rolePermissionRepository,
+            IPermissionRepository permissionRepository)
         {
             _roleRepository = roleRepository;
+            _roleMenuRepository = roleMenuRepository;
+            _rolePermissionRepository = rolePermissionRepository;
+            _permissionRepository = permissionRepository;
         }
 
         /// <summary>
-        /// 获取角色
+        /// 通过Id获取角色
         /// </summary>
         /// <param name="roleId"></param>
         /// <returns></returns>
@@ -34,15 +45,14 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         }
 
         /// <summary>
-        /// 获取角色
+        /// 获取所有角色
         /// </summary>
-        /// <param name="models"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<Response<PaginationQueryResult<T_Role>>> Get([FromQuery] PaginationQueryModel models)
+        public async Task<Response<IEnumerable<T_Role>>> Get()
         {
-            var dto = await _roleRepository.QueryPagedAsync(models.Adapt<PaginationQueryDto>(), "Name");
-            return PaginationQueryResult(dto.Adapt<PaginationQueryResult<T_Role>>());
+            var entities = await _roleRepository.QueryAllAsync();
+            return SucceededResult(entities);
         }
 
         /// <summary>
@@ -110,6 +120,132 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         public async Task<Response> Delete([FromBody, MinLength(1)] Guid[] roleIds)
         {
             await _roleRepository.DeleteBatchByIdsAsync("Id", roleIds, true);
+            return SucceededResult();
+        }
+
+        /// <summary>
+        /// 获取角色关联的菜单
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        [HttpGet("{roleId}/Menus")]
+        public async Task<Response<IEnumerable<Guid>>> GetMenus([FromRoute] Guid roleId)
+        {
+            var entities = await _roleMenuRepository.QueryByIdAsync("Fk_RoleId", roleId);
+
+            return SucceededResult(entities.Select(e => e.MenuId));
+        }
+
+        /// <summary>
+        /// 修改角色关联的菜单
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <param name="menuIds"></param>
+        /// <returns></returns>
+        [HttpPut("{roleId}/Menus")]
+        public async Task<Response> PutMenus([FromRoute] Guid roleId, [FromBody, MinLength(1)] Guid[] menuIds)
+        {
+            int count = await _roleRepository.QueryRecordCountAsync("Id=@Id", new { Id = roleId });
+            if (count == 0)
+            {
+                return FailedResult($"修改失败, 角色Id: {roleId} 不存在");
+            }
+
+            if (menuIds.Length > 0)
+            {
+                var entities = new List<T_RoleMenu>();
+                foreach (var menuId in menuIds)
+                {
+                    entities.Add(new T_RoleMenu()
+                    {
+                        RoleId = roleId,
+                        MenuId = menuId
+                    });
+                }
+
+                try
+                {
+                    UnitOfWork.Default.EnterContext();
+
+                    _roleMenuRepository.DeleteById("Fk_RoleId", roleId);
+                    _roleMenuRepository.InsertBatch(entities);
+
+                    UnitOfWork.Default.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    UnitOfWork.Default.Rollback();
+                    throw;
+                }
+            }
+            else
+            {
+                await _roleMenuRepository.DeleteByIdAsync("Fk_RoleId", roleId);
+            }
+
+            return SucceededResult();
+        }
+
+        /// <summary>
+        /// 获取角色关联的权限
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        [HttpGet("{roleId}/Permissions")]
+        public async Task<Response<IEnumerable<Guid>>> GetPermissions([FromRoute] Guid roleId)
+        {
+            var entities = await _rolePermissionRepository.QueryByIdAsync("Fk_RoleId", roleId);
+
+            return SucceededResult(entities.Select(e => e.PermissionId));
+        }
+
+        /// <summary>
+        /// 修改角色关联的权限
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <param name="permissionIds"></param>
+        /// <returns></returns>
+        [HttpPut("{roleId}/Permissions")]
+        public async Task<Response> PutPermissions([FromRoute] Guid roleId, [FromBody, MinLength(1)] Guid[] permissionIds)
+        {
+            int count = await _roleRepository.QueryRecordCountAsync("Id=@Id", new { Id = roleId });
+            if (count == 0)
+            {
+                return FailedResult($"修改失败, 角色Id: {roleId} 不存在");
+            }
+
+            if (permissionIds.Length > 0)
+            {
+                var entities = new List<T_RolePermission>();
+                foreach (var permissionId in permissionIds)
+                {
+                    entities.Add(new T_RolePermission()
+                    {
+                        RoleId = roleId,
+                        PermissionId = permissionId
+                    });
+                }
+
+                try
+                {
+                    UnitOfWork.Default.EnterContext();
+
+                    _rolePermissionRepository.DeleteById("Fk_RoleId", roleId);
+                    _rolePermissionRepository.InsertBatch(entities);
+
+                    UnitOfWork.Default.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    UnitOfWork.Default.Rollback();
+                    throw;
+                }
+            }
+            else
+            {
+                await _rolePermissionRepository.DeleteByIdAsync("Fk_RoleId", roleId);
+            }
+
             return SucceededResult();
         }
     }

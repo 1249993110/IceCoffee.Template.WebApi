@@ -133,6 +133,8 @@ namespace IceCoffee.Template.WebApi
         /// <param name="builder"></param>
         private static void ConfigureServices(this WebApplicationBuilder builder)
         {
+            MapsterTypeAdapter.ConfigEntityToModel();
+
             var env = builder.Environment;
             var config = builder.Configuration;
             var services = builder.Services;
@@ -177,6 +179,8 @@ namespace IceCoffee.Template.WebApi
                 };
             }).AddJsonOptions(options =>
             {
+                options.JsonSerializerOptions.Converters.Add(new GuidConverter());
+                options.JsonSerializerOptions.Converters.Add(new GuidNullableConverter());
                 options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
                 options.JsonSerializerOptions.Converters.Add(new DateTimeNullableConverter());
                 // options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); // [JsonConverter(typeof(JsonStringEnumConverter))]

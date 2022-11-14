@@ -9,8 +9,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="IceCoffee.DbCore" Version="1.0.5.9" />
+		<!--<PackageReference Include="IceCoffee.DbCore" Version="1.0.6" />-->
 		<PackageReference Include="Microsoft.Data.SqlClient" Version="5.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\..\IceCoffee.DbCore\IceCoffee.DbCore\IceCoffee.DbCore.csproj" />
 	</ItemGroup>
 
 </Project>

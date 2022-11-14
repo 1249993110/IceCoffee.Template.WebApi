@@ -41,7 +41,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         [HttpGet]
         public async Task<Response<PaginationQueryResult<T_Permission>>> Get([FromQuery] PaginationQueryModel models)
         {
-            var dto = await _permissionRepository.QueryPagedAsync(models.Adapt<PaginationQueryDto>(), "Area");
+            var dto = await _permissionRepository.QueryPagedAsync(models.Adapt<PaginationQueryDto>());
             return PaginationQueryResult(dto.Adapt<PaginationQueryResult<T_Permission>>());
         }
 

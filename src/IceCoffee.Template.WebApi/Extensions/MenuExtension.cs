@@ -45,5 +45,47 @@ namespace IceCoffee.Template.WebApi.Extensions
 
             return treenode;
         }
+
+        /// <summary>
+        /// 转换为树形结构
+        /// </summary>
+        /// <param name="menus">菜单集合</param>
+        public static IEnumerable<MenuTreeModel> ToTreeModel(this IEnumerable<V_RoleMenu> menus)
+        {
+            var lstTreeNodes = new List<MenuTreeModel>();
+
+            var parentMenus = menus.Where(t => t.MenuParentId == null).OrderBy(m => m.Sort);
+            foreach (var item in parentMenus)
+            {
+                var node = ParseTreeNode(menus, item);
+                lstTreeNodes.Add(node);
+            }
+
+            return lstTreeNodes;
+        }
+
+        /// <summary>
+        /// 解析树形节点
+        /// </summary>
+        /// <param name="menus">菜单集合</param>
+        /// <param name="item">当前菜单节点</param>
+        private static MenuTreeModel ParseTreeNode(IEnumerable<V_RoleMenu> menus, V_RoleMenu item)
+        {
+            var treenode = item.Adapt<MenuTreeModel>();
+
+            var subitems = menus.Where(p => p.MenuParentId == item.MenuId && p.MenuId != item.MenuId).OrderBy(m => m.Sort);
+
+            if (subitems != null && subitems.Any())
+            {
+                treenode.Children = new List<MenuTreeModel>();
+                foreach (var subitem in subitems)
+                {
+                    var submodule = ParseTreeNode(menus, subitem);
+                    treenode.Children.Add(submodule);
+                }
+            }
+
+            return treenode;
+        }
     }
 }
