@@ -17,4 +17,7 @@ CREATE TABLE T_Menu(
 	IsExternalLink BIT NOT NULL DEFAULT 0,						--是否为外链
 	Description NVARCHAR(512)									--说明
 );
+
+--创建索引
+CREATE INDEX Index_IsEnabled ON T_Menu(IsEnabled);
 GO

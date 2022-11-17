@@ -182,7 +182,6 @@ namespace IceCoffee.Template.WebApi.Models
     {
         public Guid[]? RoleIds { get; set; }
 
-        [DefaultValue(true)]
-        public bool IsEnabled { get; set; } = true;
+        public bool? IsEnabled { get; set; }
     }
 }

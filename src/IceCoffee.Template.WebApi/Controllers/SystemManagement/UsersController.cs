@@ -80,15 +80,24 @@ namespace HYCX.Power.WebApi.Controllers.SystemManagement
         {
             var queryDto = model.Adapt<UserQueryDto>();
             queryDto.KeywordMappedColumnNames = new string[] { "Name", "DisplayName", "PhoneNumber" };
-            queryDto.PreWhereBy = "IsEnabled=@IsEnabled";
+
+            if (model.IsEnabled.HasValue)
+            {
+                queryDto.PreWhereBy = "IsEnabled=@IsEnabled";
+            }
 
             if (model.RoleIds != null && model.RoleIds.Length > 0)
             {
-                queryDto.PreWhereBy += " AND EXISTS(SELECT 1 FROM T_UserRole WHERE Fk_UserId=V_User.Id AND Fk_RoleId IN @RoleIds)";
+                if(string.IsNullOrEmpty(queryDto.PreWhereBy) == false)
+                {
+                    queryDto.PreWhereBy += " AND ";
+                }
+
+                queryDto.PreWhereBy += "EXISTS(SELECT 1 FROM T_UserRole WHERE Fk_UserId=V_User.Id AND Fk_RoleId IN @RoleIds)";
             }
 
-            var entities = await _vUserRepository.QueryPagedAsync(queryDto);
-            return PaginationQueryResult(entities.Adapt<PaginationQueryResult<UserModel>>());
+            var result = await _vUserRepository.QueryPagedAsync(queryDto);
+            return PaginationQueryResult(result.Adapt<PaginationQueryResult<UserModel>>());
         }
 
         /// <summary>

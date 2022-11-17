@@ -51,7 +51,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         [HttpGet]
         public async Task<Response<IEnumerable<T_Role>>> Get()
         {
-            var entities = await _roleRepository.QueryAllAsync();
+            var entities = await _roleRepository.QueryAllAsync("Name");
             return SucceededResult(entities);
         }
 
@@ -63,6 +63,12 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         [HttpPost]
         public async Task<Response> Post([FromBody] RoleAddModel model)
         {
+            int count = await _roleRepository.QueryRecordCountAsync("Name=@Name", new { model.Name });
+            if (count != 0)
+            {
+                return FailedResult($"新增失败, 角色名称: {model.Name} 已存在");
+            }
+
             var entity = model.Adapt<T_Role>();
             entity.Id = Guid.NewGuid();
             entity.CreatorId = UserInfo.UserId.ToGuidNullable();
@@ -143,7 +149,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         /// <param name="menuIds"></param>
         /// <returns></returns>
         [HttpPut("{roleId}/Menus")]
-        public async Task<Response> PutMenus([FromRoute] Guid roleId, [FromBody, MinLength(1)] Guid[] menuIds)
+        public async Task<Response> PutMenus([FromRoute] Guid roleId, [FromBody, Required] Guid[] menuIds)
         {
             int count = await _roleRepository.QueryRecordCountAsync("Id=@Id", new { Id = roleId });
             if (count == 0)
@@ -206,7 +212,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         /// <param name="permissionIds"></param>
         /// <returns></returns>
         [HttpPut("{roleId}/Permissions")]
-        public async Task<Response> PutPermissions([FromRoute] Guid roleId, [FromBody, MinLength(1)] Guid[] permissionIds)
+        public async Task<Response> PutPermissions([FromRoute] Guid roleId, [FromBody, Required] Guid[] permissionIds)
         {
             int count = await _roleRepository.QueryRecordCountAsync("Id=@Id", new { Id = roleId });
             if (count == 0)
@@ -245,6 +251,26 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
             {
                 await _rolePermissionRepository.DeleteByIdAsync("Fk_RoleId", roleId);
             }
+
+            return SucceededResult();
+        }
+
+        /// <summary>
+        /// 修改角色启用
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <param name="isEnabled"></param>
+        /// <returns></returns>
+        [HttpPut("{roleId}/Enabled")]
+        public async Task<Response> PutEnabled([FromRoute] Guid roleId, [FromBody, Required] bool isEnabled)
+        {
+            int count = await _roleRepository.QueryRecordCountAsync("Id=@Id", new { Id = roleId });
+            if (count == 0)
+            {
+                return FailedResult($"修改失败, 角色Id: {roleId} 不存在");
+            }
+
+            await _roleRepository.UpdateColumnByIdAsync("Id", roleId, "IsEnabled", isEnabled);
 
             return SucceededResult();
         }

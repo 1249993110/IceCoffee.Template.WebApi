@@ -36,13 +36,12 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         /// <summary>
         /// 获取权限
         /// </summary>
-        /// <param name="models"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<Response<PaginationQueryResult<T_Permission>>> Get([FromQuery] PaginationQueryModel models)
+        public async Task<Response<IEnumerable<T_Permission>>> Get()
         {
-            var dto = await _permissionRepository.QueryPagedAsync(models.Adapt<PaginationQueryDto>());
-            return PaginationQueryResult(dto.Adapt<PaginationQueryResult<T_Permission>>());
+            var entities = await _permissionRepository.QueryAllAsync("Area");
+            return SucceededResult(entities);
         }
 
         /// <summary>
@@ -53,6 +52,12 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         [HttpPost]
         public async Task<Response> Post([FromBody] PermissionAddModel model)
         {
+            int count = await _permissionRepository.QueryRecordCountAsync("Area=@Area", new { model.Area });
+            if (count != 0)
+            {
+                return FailedResult($"新增失败, 区域: {model.Area} 已存在");
+            }
+
             var entity = model.Adapt<T_Permission>();
             entity.Id = Guid.NewGuid();
             entity.CreatorId = UserInfo.UserId.ToGuidNullable();
@@ -110,6 +115,26 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         public async Task<Response> Delete([FromBody, MinLength(1)] Guid[] permissionIds)
         {
             await _permissionRepository.DeleteBatchByIdsAsync("Id", permissionIds, true);
+            return SucceededResult();
+        }
+
+        /// <summary>
+        /// 修改权限启用
+        /// </summary>
+        /// <param name="permissionId"></param>
+        /// <param name="isEnabled"></param>
+        /// <returns></returns>
+        [HttpPut("{permissionId}/Enabled")]
+        public async Task<Response> PutEnabled([FromRoute] Guid permissionId, [FromBody, Required] bool isEnabled)
+        {
+            int count = await _permissionRepository.QueryRecordCountAsync("Id=@Id", new { Id = permissionId });
+            if (count == 0)
+            {
+                return FailedResult($"修改失败, 权限Id: {permissionId} 不存在");
+            }
+
+            await _permissionRepository.UpdateColumnByIdAsync("Id", permissionId, "IsEnabled", isEnabled);
+
             return SucceededResult();
         }
     }

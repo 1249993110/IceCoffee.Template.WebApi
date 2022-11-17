@@ -12,4 +12,8 @@ CREATE TABLE T_Role(
 	IsEnabled BIT NOT NULL,										--是否启用
 	Description NVARCHAR(512)									--说明
 );
+
+--创建索引
+CREATE UNIQUE INDEX Index_Name ON T_Role(Name);
+CREATE INDEX Index_IsEnabled ON T_Role(IsEnabled);
 GO

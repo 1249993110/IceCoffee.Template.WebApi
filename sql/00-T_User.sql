@@ -24,4 +24,5 @@ CREATE TABLE  T_User(
 CREATE UNIQUE INDEX Index_Name ON T_User(Name);
 CREATE UNIQUE INDEX Index_PhoneNumber ON T_User(PhoneNumber);
 CREATE INDEX Index_DisplayName ON T_User(DisplayName);
+CREATE INDEX Index_IsEnabled ON T_User(IsEnabled);
 GO

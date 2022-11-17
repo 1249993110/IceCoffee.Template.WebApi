@@ -7,6 +7,6 @@ namespace IceCoffee.Template.Data.Dtos
     {
         public Guid[] RoleIds { get; set; }
 
-        public bool IsEnabled { get; set; }
+        public bool? IsEnabled { get; set; }
     }
 }

@@ -10,6 +10,10 @@ CREATE TABLE T_Permission(
 	ModifiedDate DATETIME,										--修改日期
 	Area VARCHAR(512) NOT NULL,									--授权区域
 	IsEnabled BIT NOT NULL,										--是否启用
-	Description VARCHAR(512)									--说明
+	Description NVARCHAR(512)									--说明
 );
+
+--创建索引
+CREATE UNIQUE INDEX Index_Area ON T_Permission(Area);
+CREATE INDEX Index_IsEnabled ON T_Permission(IsEnabled);
 GO
