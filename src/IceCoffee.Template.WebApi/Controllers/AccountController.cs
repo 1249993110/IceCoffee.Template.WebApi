@@ -60,7 +60,7 @@ namespace IceCoffee.Template.WebApi.Controllers
             user.PasswordSalt = newPasswordSalt;
             await userRepository.UpdateAsync(user);
 
-            await refreshTokenRepository.DeleteByIdAsync("Fk_UserId", userId);
+            await refreshTokenRepository.DeleteByIdAsync("FK_UserId", userId);
             return SucceededResult();
         }
 

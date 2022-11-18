@@ -50,11 +50,11 @@ GO
 
 --用户角色表
 CREATE TABLE T_UserRole(
-	Fk_UserId UNIQUEIDENTIFIER NOT NULL,				--用户Id
-	Fk_RoleId UNIQUEIDENTIFIER NOT NULL,				--角色Id
-	PRIMARY KEY(Fk_UserId,Fk_RoleId),
-	FOREIGN KEY (Fk_UserId) REFERENCES T_User(Id) ON DELETE CASCADE,
-	FOREIGN KEY (Fk_RoleId) REFERENCES T_Role(Id) ON DELETE CASCADE
+	FK_UserId UNIQUEIDENTIFIER NOT NULL,				--用户Id
+	FK_RoleId UNIQUEIDENTIFIER NOT NULL,				--角色Id
+	PRIMARY KEY(FK_UserId,FK_RoleId),
+	FOREIGN KEY (FK_UserId) REFERENCES T_User(Id) ON DELETE CASCADE,
+	FOREIGN KEY (FK_RoleId) REFERENCES T_Role(Id) ON DELETE CASCADE
 );
 GO
 USE [IceCoffee.Template]
@@ -85,11 +85,11 @@ GO
 
 --角色菜单表
 CREATE TABLE T_RoleMenu(	
-	Fk_RoleId UNIQUEIDENTIFIER NOT NULL,				--角色Id
-	Fk_MenuId UNIQUEIDENTIFIER NOT NULL,				--菜单Id
-	PRIMARY KEY(Fk_RoleId,Fk_MenuId),
-	FOREIGN KEY (Fk_RoleId) REFERENCES T_Role(Id) ON DELETE CASCADE,
-	FOREIGN KEY (Fk_MenuId) REFERENCES T_Menu(Id) ON DELETE CASCADE
+	FK_RoleId UNIQUEIDENTIFIER NOT NULL,				--角色Id
+	FK_MenuId UNIQUEIDENTIFIER NOT NULL,				--菜单Id
+	PRIMARY KEY(FK_RoleId,FK_MenuId),
+	FOREIGN KEY (FK_RoleId) REFERENCES T_Role(Id) ON DELETE CASCADE,
+	FOREIGN KEY (FK_MenuId) REFERENCES T_Menu(Id) ON DELETE CASCADE
 );
 GO
 USE [IceCoffee.Template]
@@ -116,11 +116,11 @@ GO
 
 --角色许可表
 CREATE TABLE T_RolePermission(	
-	Fk_RoleId UNIQUEIDENTIFIER NOT NULL,					--角色Id
-	Fk_PermissionId UNIQUEIDENTIFIER NOT NULL,				--许可Id
-	PRIMARY KEY(Fk_RoleId,Fk_PermissionId),
-	FOREIGN KEY (Fk_RoleId) REFERENCES T_Role(Id) ON DELETE CASCADE,
-	FOREIGN KEY (Fk_PermissionId) REFERENCES T_Permission(Id) ON DELETE CASCADE
+	FK_RoleId UNIQUEIDENTIFIER NOT NULL,					--角色Id
+	FK_PermissionId UNIQUEIDENTIFIER NOT NULL,				--许可Id
+	PRIMARY KEY(FK_RoleId,FK_PermissionId),
+	FOREIGN KEY (FK_RoleId) REFERENCES T_Role(Id) ON DELETE CASCADE,
+	FOREIGN KEY (FK_PermissionId) REFERENCES T_Permission(Id) ON DELETE CASCADE
 );
 GO
 USE [IceCoffee.Template]
@@ -146,9 +146,9 @@ SELECT
 FROM
 	T_User AS u
 LEFT JOIN T_UserRole AS ur ON
-	u.Id = ur.Fk_UserId 
+	u.Id = ur.FK_UserId 
 LEFT JOIN T_Role AS r ON
-	ur.Fk_RoleId = r.Id;
+	ur.FK_RoleId = r.Id;
 GO
 USE [IceCoffee.Template]
 GO
@@ -233,9 +233,9 @@ SELECT
 FROM
 	T_Role AS r
 LEFT JOIN T_RoleMenu AS rm ON
-	r.Id = rm.Fk_RoleId 
+	r.Id = rm.FK_RoleId 
 LEFT JOIN T_Menu AS m ON
-	rm.Fk_MenuId = m.Id;
+	rm.FK_MenuId = m.Id;
 GO
 USE [IceCoffee.Template]
 GO
@@ -252,9 +252,9 @@ SELECT
 FROM
 	T_Role AS r
 LEFT JOIN T_RolePermission AS rp ON
-	r.Id = rp.Fk_RoleId 
+	r.Id = rp.FK_RoleId 
 LEFT JOIN T_Permission AS p ON
-	rp.Fk_PermissionId = p.Id;
+	rp.FK_PermissionId = p.Id;
 GO
 USE [IceCoffee.Template]
 GO
@@ -263,15 +263,15 @@ GO
 CREATE TABLE T_RefreshToken(
 	Id CHAR(64) NOT NULL PRIMARY KEY,							--Refresh Token
 	CreatedDate DATETIME NOT NULL DEFAULT GETDATE(),			--创建日期
-	Fk_UserId UNIQUEIDENTIFIER NOT NULL,						--用户Id
+	FK_UserId UNIQUEIDENTIFIER NOT NULL,						--用户Id
 	JwtId UNIQUEIDENTIFIER NOT NULL,							--使用 JwtId 映射到对应的 token
 	IsRevorked BIT NOT NULL,									--是否出于安全原因已将其撤销
 	ExpiryDate DATETIME NOT NULL,								--Refresh Token 的生命周期很长，可以长达数月。注意一个Refresh Token只能被用来刷新一次
-	FOREIGN KEY (Fk_UserId) REFERENCES T_User(Id) ON DELETE CASCADE
+	FOREIGN KEY (FK_UserId) REFERENCES T_User(Id) ON DELETE CASCADE
 );
 
 --创建索引
-CREATE INDEX Index_Fk_UserId ON T_RefreshToken(Fk_UserId);
+CREATE INDEX Index_FK_UserId ON T_RefreshToken(FK_UserId);
 CREATE UNIQUE INDEX Index_JwtId ON T_RefreshToken(JwtId);
 GO
 USE [IceCoffee.Template]
@@ -280,11 +280,11 @@ GO
 INSERT INTO T_User(Id,Name,DisplayName,PasswordHash,PasswordSalt,IsEnabled) VALUES('6474EFE2-7C58-9C1B-8A89-88C898CB543A','admin','系统管理员','Xg9+QTHDb5Mw9vaEe9q8PqvlZqE=','NCPuMnV9WlfswrYk42cENwKP2mU/K9IJ',1);
 
 INSERT INTO T_Role(Id,Name,IsEnabled,Description) VALUES('929A7D9F-AEE3-8634-A009-4C12259E09AD','Administrator',1,'管理员');
-INSERT INTO T_UserRole(Fk_UserId,Fk_RoleId) VALUES((SELECT Id FROM T_User WHERE Name='admin'),(SELECT Id FROM T_Role WHERE Name='Administrator'));
+INSERT INTO T_UserRole(FK_UserId,FK_RoleId) VALUES((SELECT Id FROM T_User WHERE Name='admin'),(SELECT Id FROM T_Role WHERE Name='Administrator'));
 
 
 INSERT INTO T_Permission(Id,Area,IsEnabled) VALUES('F3502BF4-0AFB-93B3-0E1D-43786DF94AB1','SystemManagement',1);
-INSERT INTO T_RolePermission(Fk_RoleId,Fk_PermissionId) VALUES((SELECT Id FROM T_Role WHERE Name='Administrator'),(SELECT Id FROM T_Permission WHERE Area='SystemManagement'));
+INSERT INTO T_RolePermission(FK_RoleId,FK_PermissionId) VALUES((SELECT Id FROM T_Role WHERE Name='Administrator'),(SELECT Id FROM T_Permission WHERE Area='SystemManagement'));
 
 INSERT INTO T_Menu(Id,ParentId,Name,Icon,Sort,Url,IsEnabled) VALUES('F1FB0526-CB1E-FCA8-2754-5868EFF0194B',null,'主页','home',0,'/home',1);
 INSERT INTO T_Menu(Id,ParentId,Name,Icon,Sort,Url,IsEnabled) VALUES('BB106982-0F6E-BFD8-F668-FE622FA6195A',null,'系统管理','s-management',99,null,1);
@@ -294,4 +294,4 @@ INSERT INTO T_Menu(Id,ParentId,Name,Icon,Sort,Url,IsEnabled) VALUES('2F2C047E-71
 INSERT INTO T_Menu(Id,ParentId,Name,Icon,Sort,Url,IsEnabled) VALUES('4AF9C52E-DA74-116C-4EA3-95DBE373B0D5',(SELECT Id FROM T_Menu WHERE Name='系统管理'),'权限管理','permission',4,'/system-management/permissions',1);
 INSERT INTO T_Menu(Id,ParentId,Name,Icon,Sort,Url,IsEnabled,IsExternalLink) VALUES('3001E9D1-17EB-2B7C-FAE2-7724B74FD7CA',null,'接口文档','document',100,'/swagger/index.html',1,1);
 
-INSERT INTO T_RoleMenu(Fk_RoleId,Fk_MenuId) SELECT r.Id AS Fk_RoleId, m.Id AS Fk_MenuId FROM T_Role AS r LEFT JOIN T_Menu AS m ON r.Name='Administrator';
+INSERT INTO T_RoleMenu(FK_RoleId,FK_MenuId) SELECT r.Id AS FK_RoleId, m.Id AS FK_MenuId FROM T_Role AS r LEFT JOIN T_Menu AS m ON r.Name='Administrator';

@@ -93,7 +93,7 @@ namespace HYCX.Power.WebApi.Controllers.SystemManagement
                     queryDto.PreWhereBy += " AND ";
                 }
 
-                queryDto.PreWhereBy += "EXISTS(SELECT 1 FROM T_UserRole WHERE Fk_UserId=V_User.Id AND Fk_RoleId IN @RoleIds)";
+                queryDto.PreWhereBy += "EXISTS(SELECT 1 FROM T_UserRole WHERE FK_UserId=V_User.Id AND FK_RoleId IN @RoleIds)";
             }
 
             var result = await _vUserRepository.QueryPagedAsync(queryDto);
@@ -241,7 +241,7 @@ namespace HYCX.Power.WebApi.Controllers.SystemManagement
         [HttpGet("{userId}/Roles")]
         public async Task<Response<IEnumerable<Guid>>> GetRoles([FromRoute] Guid userId)
         {
-            var entities = await _userRoleRepository.QueryByIdAsync("Fk_UserId", userId);
+            var entities = await _userRoleRepository.QueryByIdAsync("FK_UserId", userId);
             return SucceededResult(entities.Select(s => s.RoleId));
         }
 
@@ -263,7 +263,7 @@ namespace HYCX.Power.WebApi.Controllers.SystemManagement
                 {
                     UnitOfWork.Default.EnterContext();
 
-                    _userRoleRepository.DeleteById("Fk_UserId", userId);
+                    _userRoleRepository.DeleteById("FK_UserId", userId);
                     _userRoleRepository.InsertBatch(entities);
 
                     UnitOfWork.Default.SaveChanges();
@@ -276,7 +276,7 @@ namespace HYCX.Power.WebApi.Controllers.SystemManagement
             }
             else
             {
-                _userRoleRepository.DeleteById("Fk_UserId", userId);
+                _userRoleRepository.DeleteById("FK_UserId", userId);
             }
         }
 

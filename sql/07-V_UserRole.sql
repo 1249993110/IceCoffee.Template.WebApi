@@ -21,7 +21,7 @@ SELECT
 FROM
 	T_User AS u
 LEFT JOIN T_UserRole AS ur ON
-	u.Id = ur.Fk_UserId 
+	u.Id = ur.FK_UserId 
 LEFT JOIN T_Role AS r ON
-	ur.Fk_RoleId = r.Id;
+	ur.FK_RoleId = r.Id;
 GO

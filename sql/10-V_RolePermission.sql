@@ -13,7 +13,7 @@ SELECT
 FROM
 	T_Role AS r
 LEFT JOIN T_RolePermission AS rp ON
-	r.Id = rp.Fk_RoleId 
+	r.Id = rp.FK_RoleId 
 LEFT JOIN T_Permission AS p ON
-	rp.Fk_PermissionId = p.Id;
+	rp.FK_PermissionId = p.Id;
 GO

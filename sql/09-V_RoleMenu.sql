@@ -19,7 +19,7 @@ SELECT
 FROM
 	T_Role AS r
 LEFT JOIN T_RoleMenu AS rm ON
-	r.Id = rm.Fk_RoleId 
+	r.Id = rm.FK_RoleId 
 LEFT JOIN T_Menu AS m ON
-	rm.Fk_MenuId = m.Id;
+	rm.FK_MenuId = m.Id;
 GO

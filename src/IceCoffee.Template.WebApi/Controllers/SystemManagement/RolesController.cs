@@ -137,7 +137,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         [HttpGet("{roleId}/Menus")]
         public async Task<Response<IEnumerable<Guid>>> GetMenus([FromRoute] Guid roleId)
         {
-            var entities = await _roleMenuRepository.QueryByIdAsync("Fk_RoleId", roleId);
+            var entities = await _roleMenuRepository.QueryByIdAsync("FK_RoleId", roleId);
 
             return SucceededResult(entities.Select(e => e.MenuId));
         }
@@ -173,7 +173,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
                 {
                     UnitOfWork.Default.EnterContext();
 
-                    _roleMenuRepository.DeleteById("Fk_RoleId", roleId);
+                    _roleMenuRepository.DeleteById("FK_RoleId", roleId);
                     _roleMenuRepository.InsertBatch(entities);
 
                     UnitOfWork.Default.SaveChanges();
@@ -186,7 +186,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
             }
             else
             {
-                await _roleMenuRepository.DeleteByIdAsync("Fk_RoleId", roleId);
+                await _roleMenuRepository.DeleteByIdAsync("FK_RoleId", roleId);
             }
 
             return SucceededResult();
@@ -200,7 +200,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         [HttpGet("{roleId}/Permissions")]
         public async Task<Response<IEnumerable<Guid>>> GetPermissions([FromRoute] Guid roleId)
         {
-            var entities = await _rolePermissionRepository.QueryByIdAsync("Fk_RoleId", roleId);
+            var entities = await _rolePermissionRepository.QueryByIdAsync("FK_RoleId", roleId);
 
             return SucceededResult(entities.Select(e => e.PermissionId));
         }
@@ -236,7 +236,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
                 {
                     UnitOfWork.Default.EnterContext();
 
-                    _rolePermissionRepository.DeleteById("Fk_RoleId", roleId);
+                    _rolePermissionRepository.DeleteById("FK_RoleId", roleId);
                     _rolePermissionRepository.InsertBatch(entities);
 
                     UnitOfWork.Default.SaveChanges();
@@ -249,7 +249,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
             }
             else
             {
-                await _rolePermissionRepository.DeleteByIdAsync("Fk_RoleId", roleId);
+                await _rolePermissionRepository.DeleteByIdAsync("FK_RoleId", roleId);
             }
 
             return SucceededResult();
