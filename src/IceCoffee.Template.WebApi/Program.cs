@@ -31,6 +31,7 @@ namespace IceCoffee.Template.WebApi
                 Directory.SetCurrentDirectory(AppContext.BaseDirectory);
 
                 TypeAdapterConfig.GlobalSettings.Compiler = exp => exp.CompileFast();
+                MapsterTypeAdapter.ConfigEntityToModel();
 
                 var builder = WebApplication.CreateBuilder(args);
                 var hostBuilder = builder.Host;
@@ -133,8 +134,6 @@ namespace IceCoffee.Template.WebApi
         /// <param name="builder"></param>
         private static void ConfigureServices(this WebApplicationBuilder builder)
         {
-            MapsterTypeAdapter.ConfigEntityToModel();
-
             var env = builder.Environment;
             var config = builder.Configuration;
             var services = builder.Services;
