@@ -105,6 +105,7 @@ namespace IceCoffee.Template.WebApi
             options.DefaultFileNames.Clear();
             options.DefaultFileNames.Add("index.html");
             app.UseDefaultFiles(options);
+
             app.UseStaticFiles();
 
             app.UseRouting();

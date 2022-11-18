@@ -24,6 +24,7 @@ CREATE TABLE  T_User(
 CREATE UNIQUE INDEX Index_Name ON T_User(Name);
 CREATE UNIQUE INDEX Index_PhoneNumber ON T_User(PhoneNumber);
 CREATE INDEX Index_DisplayName ON T_User(DisplayName);
+CREATE INDEX Index_IsEnabled ON T_User(IsEnabled);
 GO
 USE [IceCoffee.Template]
 GO
@@ -39,6 +40,10 @@ CREATE TABLE T_Role(
 	IsEnabled BIT NOT NULL,										--是否启用
 	Description NVARCHAR(512)									--说明
 );
+
+--创建索引
+CREATE UNIQUE INDEX Index_Name ON T_Role(Name);
+CREATE INDEX Index_IsEnabled ON T_Role(IsEnabled);
 GO
 USE [IceCoffee.Template]
 GO
@@ -71,6 +76,9 @@ CREATE TABLE T_Menu(
 	IsExternalLink BIT NOT NULL DEFAULT 0,						--是否为外链
 	Description NVARCHAR(512)									--说明
 );
+
+--创建索引
+CREATE INDEX Index_IsEnabled ON T_Menu(IsEnabled);
 GO
 USE [IceCoffee.Template]
 GO
@@ -96,8 +104,12 @@ CREATE TABLE T_Permission(
 	ModifiedDate DATETIME,										--修改日期
 	Area VARCHAR(512) NOT NULL,									--授权区域
 	IsEnabled BIT NOT NULL,										--是否启用
-	Description VARCHAR(512)									--说明
+	Description NVARCHAR(512)									--说明
 );
+
+--创建索引
+CREATE UNIQUE INDEX Index_Area ON T_Permission(Area);
+CREATE INDEX Index_IsEnabled ON T_Permission(IsEnabled);
 GO
 USE [IceCoffee.Template]
 GO
@@ -142,20 +154,63 @@ USE [IceCoffee.Template]
 GO
 
 --创建视图
-CREATE VIEW V_RolePermission AS
+CREATE VIEW V_User AS
 SELECT
-	r.Id AS RoleId,
-	r.Name AS RoleName,
-	r.IsEnabled AS RoleEnabled,
-	p.Id AS PermissionId,
-	p.Area,
-	p.IsEnabled AS PermissionEnabled
-FROM
-	T_Role AS r
-LEFT JOIN T_RolePermission AS rp ON
-	r.Id = rp.Fk_RoleId 
-LEFT JOIN T_Permission AS p ON
-	rp.Fk_PermissionId = p.Id;
+      UserId AS Id
+      ,UserName AS Name
+      ,CreatedDate
+      ,DisplayName
+      ,PhoneNumber
+      ,Email
+      ,LastLoginTime
+      ,LastLoginIp
+      ,Address
+      ,Description
+      ,UserEnabled AS IsEnabled
+      ,(STUFF((SELECT ',' + CAST(RoleId AS VARCHAR(36)) FROM V_UserRole WHERE UserId = vur.UserId FOR XML PATH('')),1,1,'')) AS Roles
+FROM V_UserRole AS vur GROUP BY 
+      UserId
+      ,UserName
+      ,CreatedDate
+      ,DisplayName
+      ,PhoneNumber
+      ,Email
+      ,LastLoginTime
+      ,LastLoginIp
+      ,Address
+      ,Description
+      ,UserEnabled
+GO
+USE [IceCoffee.Template]
+GO
+
+--创建视图
+CREATE VIEW V_User AS
+SELECT 
+      UserId AS Id
+      ,UserName AS Name
+      ,CreatedDate
+      ,DisplayName
+      ,PhoneNumber
+      ,Email
+      ,LastLoginTime
+      ,LastLoginIp
+      ,Address
+      ,Description
+      ,UserEnabled AS IsEnabled
+      ,STRING_AGG(CAST(RoleId AS VARCHAR(36)),',') AS Roles
+FROM V_UserRole GROUP BY 
+      UserId
+      ,UserName
+      ,CreatedDate
+      ,DisplayName
+      ,PhoneNumber
+      ,Email
+      ,LastLoginTime
+      ,LastLoginIp
+      ,Address
+      ,Description
+      ,UserEnabled
 GO
 USE [IceCoffee.Template]
 GO
@@ -181,6 +236,25 @@ LEFT JOIN T_RoleMenu AS rm ON
 	r.Id = rm.Fk_RoleId 
 LEFT JOIN T_Menu AS m ON
 	rm.Fk_MenuId = m.Id;
+GO
+USE [IceCoffee.Template]
+GO
+
+--创建视图
+CREATE VIEW V_RolePermission AS
+SELECT
+	r.Id AS RoleId,
+	r.Name AS RoleName,
+	r.IsEnabled AS RoleEnabled,
+	p.Id AS PermissionId,
+	p.Area,
+	p.IsEnabled AS PermissionEnabled
+FROM
+	T_Role AS r
+LEFT JOIN T_RolePermission AS rp ON
+	r.Id = rp.Fk_RoleId 
+LEFT JOIN T_Permission AS p ON
+	rp.Fk_PermissionId = p.Id;
 GO
 USE [IceCoffee.Template]
 GO
