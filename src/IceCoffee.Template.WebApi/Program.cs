@@ -3,6 +3,7 @@ using IceCoffee.AspNetCore.Authentication;
 using IceCoffee.AspNetCore.JsonConverters;
 using IceCoffee.AspNetCore.Middlewares;
 using IceCoffee.AspNetCore.Options;
+using IceCoffee.DbCore.Repositories;
 using IceCoffee.Template.Data;
 using Mapster;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -149,10 +150,9 @@ namespace IceCoffee.Template.WebApi
 
             foreach (var type in typeof(DefaultDbConnectionInfo).Assembly.GetExportedTypes())
             {
-                if (type.Namespace != null && type.Namespace.StartsWith("IceCoffee.Template.Data.Repositories"))
+                if (type.IsSubclassOf(typeof(RepositoryBase)) && type.IsAbstract == false)
                 {
-                    var interfaceType = type.GetInterfaces().First(
-                        p => p.Namespace != null && p.Namespace.StartsWith("IceCoffee.Template.Data.IRepositories"));
+                    var interfaceType = type.GetInterfaces().First(p => p.IsGenericType == false);
                     services.TryAddSingleton(interfaceType, type);
                 }
             }
