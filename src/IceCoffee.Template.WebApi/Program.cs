@@ -289,6 +289,15 @@ namespace IceCoffee.Template.WebApi
                     // 可以设置从注释文件加载, 但是加载的内容可被 OpenApiTagAttribute 特性覆盖
                     config.UseControllerSummaryAsTagDescription = true;
 
+                    config.AddSecurity(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme()
+                    {
+                        Type = OpenApiSecuritySchemeType.Http,
+                        Scheme = JwtBearerDefaults.AuthenticationScheme,
+                        BearerFormat = "JWT",
+                        Description = "Type into the textbox: {your JWT token}."
+                    });
+                    config.OperationProcessors.Add(new AspNetCoreOperationFallbackPolicyProcessor(JwtBearerDefaults.AuthenticationScheme));
+
                     config.AddSecurity("ApiKey", new OpenApiSecurityScheme()
                     {
                         Type = OpenApiSecuritySchemeType.ApiKey,
@@ -297,17 +306,7 @@ namespace IceCoffee.Template.WebApi
                         In = OpenApiSecurityApiKeyLocation.Header,
                         Description = "Type into the textbox: {your access-token}."
                     });
-
-                    config.AddSecurity(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme()
-                    {
-                        Type = OpenApiSecuritySchemeType.Http,
-                        Scheme = JwtBearerDefaults.AuthenticationScheme,
-                        BearerFormat = "JWT",
-                        Description = "Type into the textbox: {your JWT token}."
-                    });
-
                     config.OperationProcessors.Add(new AspNetCoreOperationFallbackPolicyProcessor(nameof(OpenApiSecuritySchemeType.ApiKey)));
-                    config.OperationProcessors.Add(new AspNetCoreOperationFallbackPolicyProcessor(JwtBearerDefaults.AuthenticationScheme));
                 });
             }
 

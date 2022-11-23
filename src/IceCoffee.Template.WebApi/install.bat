@@ -2,7 +2,7 @@
 @echo off
 ::设置UTF-8编码
 chcp 65001
-set serviceName= "IceCoffee.Template.WebApi"
+set serviceName=IceCoffee.Template.WebApi
 
 @title 安装windows服务
 echo 正在安装服务...
