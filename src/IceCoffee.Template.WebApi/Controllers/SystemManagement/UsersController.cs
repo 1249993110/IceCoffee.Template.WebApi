@@ -139,7 +139,7 @@ namespace HYCX.Power.WebApi.Controllers.SystemManagement
 
             await _userRepository.InsertAsync(entity);
 
-            ModifyUserRoles(entity.Id, model.RoleIds.Adapt<Guid[]>());
+            ModifyUserRoles(entity.Id, model);
 
             return SucceededResult();
         }
@@ -181,7 +181,7 @@ namespace HYCX.Power.WebApi.Controllers.SystemManagement
 
             await _userRepository.UpdateAsync(entity);
 
-            ModifyUserRoles(userId, model.RoleIds.Adapt<Guid[]>());
+            ModifyUserRoles(userId, model);
 
             return SucceededResult();
         }

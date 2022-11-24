@@ -5,7 +5,7 @@ namespace IceCoffee.Template.WebApi.Models
 {
     public class UserAddModel
     {
-        public UserAddModel(string passwordHash, string[] roleIds)
+        public UserAddModel(string passwordHash, Guid[] roleIds)
         {
             PasswordHash = passwordHash;
             RoleIds = roleIds;
@@ -55,7 +55,7 @@ namespace IceCoffee.Template.WebApi.Models
         public string? PhoneNumber { get; set; }
 
         [Required]
-        public string[] RoleIds { get; set; }
+        public Guid[] RoleIds { get; set; }
     }
 
     public class UserEditModel
@@ -104,9 +104,9 @@ namespace IceCoffee.Template.WebApi.Models
         public string? PhoneNumber { get; set; }
 
         [Required]
-        public string[] RoleIds { get; set; }
+        public Guid[] RoleIds { get; set; }
 
-        public UserEditModel(string[] roleIds)
+        public UserEditModel(Guid[] roleIds)
         {
             RoleIds = roleIds;
         }
