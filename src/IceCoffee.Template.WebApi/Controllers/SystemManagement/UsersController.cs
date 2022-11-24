@@ -42,7 +42,7 @@ namespace HYCX.Power.WebApi.Controllers.SystemManagement
         }
 
         /// <summary>
-        /// 删除用户
+        /// 批量删除用户
         /// </summary>
         /// <param name="userIds"></param>
         /// <returns></returns>

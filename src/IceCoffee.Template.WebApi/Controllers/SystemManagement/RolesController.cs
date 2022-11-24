@@ -118,7 +118,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         }
 
         /// <summary>
-        /// 删除角色
+        /// 批量删除角色
         /// </summary>
         /// <param name="roleIds"></param>
         /// <returns></returns>

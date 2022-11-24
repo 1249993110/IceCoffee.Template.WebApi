@@ -107,7 +107,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         }
 
         /// <summary>
-        /// 删除权限
+        /// 批量删除权限
         /// </summary>
         /// <param name="permissionIds"></param>
         /// <returns></returns>

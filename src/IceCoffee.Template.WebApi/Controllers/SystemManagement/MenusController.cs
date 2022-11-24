@@ -104,7 +104,7 @@ namespace IceCoffee.Template.WebApi.Controllers.SystemManagement
         }
 
         /// <summary>
-        /// 删除菜单
+        /// 批量删除菜单
         /// </summary>
         /// <param name="menuIds"></param>
         /// <returns></returns>
