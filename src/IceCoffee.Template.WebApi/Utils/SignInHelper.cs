@@ -16,8 +16,6 @@ namespace IceCoffee.Template.WebApi.Utils
         {
             string password = StringExtension.FormBase64(passwordHash);
             var userRepository = httpContext.RequestServices.GetRequiredService<IUserRepository>();
-            var vUserRoleRepository = httpContext.RequestServices.GetRequiredService<IVUserRoleRepository>();
-            var vRolePermissionRepository = httpContext.RequestServices.GetRequiredService<IVRolePermissionRepository>();
 
             // 判断用户是否存在
             var user = await userRepository.QueryByLoginNameAsync(loginName);
@@ -58,12 +56,14 @@ namespace IceCoffee.Template.WebApi.Utils
             user.LastLoginIp = httpContext.GetRemoteIpAddress();
             await userRepository.UpdateAsync(user);
 
+            var vUserRoleRepository = httpContext.RequestServices.GetRequiredService<IVUserRoleRepository>();
             var roleNames = await vUserRoleRepository.QueryEnabledRoleNamesByUserId(user.Id);
             if (roleNames.Any() == false)
             {
                 throw new Exception($"用户: {loginName} 尚未分配角色");
             }
 
+            var vRolePermissionRepository = httpContext.RequestServices.GetRequiredService<IVRolePermissionRepository>();
             var areas = await vRolePermissionRepository.QueryEnabledAreasByRoleNames(roleNames);
 
             return new UserInfo()
