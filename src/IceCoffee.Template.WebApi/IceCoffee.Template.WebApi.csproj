@@ -12,7 +12,7 @@
 
 	<ItemGroup>
 	  <PackageReference Include="FastExpressionCompiler" Version="3.3.3" />
-	  <PackageReference Include="IceCoffee.AspNetCore" Version="1.0.3.8" GeneratePathProperty="true" />
+	  <PackageReference Include="IceCoffee.AspNetCore" Version="1.0.3.12" GeneratePathProperty="true" />
 	  <PackageReference Include="IceCoffee.Common" Version="1.0.2.10" />
 	  <PackageReference Include="Mapster" Version="7.3.0" />
 	  <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="6.0.1" />

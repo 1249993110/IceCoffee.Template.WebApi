@@ -187,11 +187,11 @@ namespace IceCoffee.Template.WebApi.Controllers
         [HttpGet]
         public async Task<Response<IEnumerable<MenuTreeModel>>> UserMenus()
         {
-            var vUserRoleRepository = HttpContext.RequestServices.GetRequiredService<IVUserRoleRepository>();
+            var vUserRepository = HttpContext.RequestServices.GetRequiredService<IVUserRepository>();
             var vRoleMenuRepository = HttpContext.RequestServices.GetRequiredService<IVRoleMenuRepository>();
 
             // 第1步：根据用户找到所属角色
-            var roleIds = await vUserRoleRepository.QueryEnabledRoleIdsByUserId(base.UserInfo.UserId.ToGuid());
+            var roleIds = await vUserRepository.QueryEnabledRoleIdsByUserId(base.UserInfo.UserId.ToGuid());
 
             if (roleIds.Any() == false)
             {

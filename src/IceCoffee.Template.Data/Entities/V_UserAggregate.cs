@@ -3,17 +3,17 @@
     /// <summary>
     /// 
     /// </summary>
-    public class V_UserRole
+    public class V_UserAggregate
     {
         /// <summary>
         /// 
         /// </summary>
-        public Guid UserId { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public string UserName { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// 
@@ -58,21 +58,12 @@
         /// <summary>
         /// 
         /// </summary>
-        public Guid? RoleId { get; set; }
+        public bool IsEnabled { get; set; }
 
         /// <summary>
-        /// 
+        /// 逗号分割的角色Id
         /// </summary>
-        public string RoleName { get; set; }
+        public string Roles { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool UserEnabled { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool? RoleEnabled { get; set; }
     }
 }

@@ -2,8 +2,8 @@ USE [IceCoffee.Template]
 GO
 
 --创建视图
-CREATE VIEW V_User AS
-SELECT 
+CREATE VIEW V_UserAggregate AS
+SELECT
       UserId AS Id
       ,UserName AS Name
       ,CreatedDate
@@ -15,8 +15,8 @@ SELECT
       ,Address
       ,Description
       ,UserEnabled AS IsEnabled
-      ,STRING_AGG(CAST(RoleId AS VARCHAR(36)),',') AS Roles
-FROM V_UserRole GROUP BY 
+      ,(STUFF((SELECT ',' + CAST(RoleId AS VARCHAR(36)) FROM V_User WHERE UserId = vur.UserId FOR XML PATH('')),1,1,'')) AS Roles
+FROM V_User AS vur GROUP BY 
       UserId
       ,UserName
       ,CreatedDate

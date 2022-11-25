@@ -14,13 +14,13 @@ namespace HYCX.Power.WebApi.Controllers.SystemManagement
     public class UsersController : ApiControllerBase
     {
         private readonly IUserRepository _userRepository;
-        private readonly IVUserRepository _vUserRepository;
+        private readonly IVUserAggregateRepository _vUserAggregateRepository;
         private readonly IUserRoleRepository _userRoleRepository;
 
-        public UsersController(IUserRepository userRepository, IVUserRepository vUserRepository, IUserRoleRepository userRoleRepository)
+        public UsersController(IUserRepository userRepository, IVUserAggregateRepository vUserAggregateRepository, IUserRoleRepository userRoleRepository)
         {
             _userRepository = userRepository;
-            _vUserRepository = vUserRepository;
+            _vUserAggregateRepository = vUserAggregateRepository;
             _userRoleRepository = userRoleRepository;
         }
 
@@ -61,7 +61,7 @@ namespace HYCX.Power.WebApi.Controllers.SystemManagement
         [HttpGet("{userId}")]
         public async Task<Response<UserModel>> Get([FromRoute] Guid userId)
         {
-            var entity = (await _vUserRepository.QueryByIdAsync("Id", userId)).FirstOrDefault();
+            var entity = (await _vUserAggregateRepository.QueryByIdAsync("Id", userId)).FirstOrDefault();
             if (entity == null)
             {
                 return FailedResult("获取失败");
@@ -93,10 +93,10 @@ namespace HYCX.Power.WebApi.Controllers.SystemManagement
                     queryDto.PreWhereBy += " AND ";
                 }
 
-                queryDto.PreWhereBy += "EXISTS(SELECT 1 FROM T_UserRole WHERE FK_UserId=V_User.Id AND FK_RoleId IN @RoleIds)";
+                queryDto.PreWhereBy += "EXISTS(SELECT 1 FROM T_UserRole WHERE FK_UserId=V_UserAggregate.Id AND FK_RoleId IN @RoleIds)";
             }
 
-            var result = await _vUserRepository.QueryPagedAsync(queryDto);
+            var result = await _vUserAggregateRepository.QueryPagedAsync(queryDto);
             return PaginationQueryResult(result.Adapt<PaginationQueryResult<UserModel>>());
         }
 
@@ -139,7 +139,7 @@ namespace HYCX.Power.WebApi.Controllers.SystemManagement
 
             await _userRepository.InsertAsync(entity);
 
-            ModifyUserRoles(entity.Id, model);
+            ModifyUserRoles(entity.Id, model.RoleIds);
 
             return SucceededResult();
         }
@@ -181,7 +181,7 @@ namespace HYCX.Power.WebApi.Controllers.SystemManagement
 
             await _userRepository.UpdateAsync(entity);
 
-            ModifyUserRoles(userId, model);
+            ModifyUserRoles(userId, model.RoleIds);
 
             return SucceededResult();
         }

@@ -3,7 +3,6 @@
     /// <summary>
     /// 
     /// </summary>
-    [Table("V_RoleMenu")]
     public class V_RoleMenu
     {
         /// <summary>

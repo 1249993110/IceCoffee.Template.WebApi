@@ -37,17 +37,19 @@ namespace IceCoffee.Template.WebApi.Utils
                 throw new Exception("登录锁定, 请稍后重试");
             }
 
+            var userId = user.Id;
+
             // 检查密码
             if (PBKDF2.VerifyPassword(password, user.PasswordHash, user.PasswordSalt) == false)
             {
                 ++user.AccessFailedCount;
                 if (user.AccessFailedCount > 3)
                 {
-                    await userRepository.UpdateColumnByIdAsync("Id", user.Id, "LockoutEndDate", now.AddMinutes(10));
+                    await userRepository.UpdateColumnByIdAsync("Id", userId, "LockoutEndDate", now.AddMinutes(10));
                     throw new Exception("您的账户已被锁定, 请稍后重试");
                 }
 
-                await userRepository.UpdateColumnByIdAsync("Id", user.Id, "AccessFailedCount", user.AccessFailedCount);
+                await userRepository.UpdateColumnByIdAsync("Id", userId, "AccessFailedCount", user.AccessFailedCount);
                 throw new Exception("密码错误");
             }
 
@@ -56,8 +58,8 @@ namespace IceCoffee.Template.WebApi.Utils
             user.LastLoginIp = httpContext.GetRemoteIpAddress();
             await userRepository.UpdateAsync(user);
 
-            var vUserRoleRepository = httpContext.RequestServices.GetRequiredService<IVUserRoleRepository>();
-            var roleNames = await vUserRoleRepository.QueryEnabledRoleNamesByUserId(user.Id);
+            var vUserRepository = httpContext.RequestServices.GetRequiredService<IVUserRepository>();
+            var roleNames = await vUserRepository.QueryEnabledRoleNamesByUserId(userId);
             if (roleNames.Any() == false)
             {
                 throw new Exception($"用户: {loginName} 尚未分配角色");
@@ -68,7 +70,7 @@ namespace IceCoffee.Template.WebApi.Utils
 
             return new UserInfo()
             {
-                UserId = user.Id.ToString().ToUpper(),
+                UserId = userId.ToString().ToUpper(),
                 RoleNames = roleNames,
                 DisplayName = user.DisplayName,
                 Email = user.Email,

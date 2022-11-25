@@ -2,7 +2,7 @@ USE [IceCoffee.Template]
 GO
 
 --创建视图
-CREATE VIEW V_UserRole AS
+CREATE VIEW V_User AS
 SELECT
 	u.Id AS UserId,
 	u.Name AS UserName,
