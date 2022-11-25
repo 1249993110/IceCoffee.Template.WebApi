@@ -79,23 +79,6 @@ namespace HYCX.Power.WebApi.Controllers.SystemManagement
         public async Task<Response<PaginationQueryResult<UserModel>>> Get([FromQuery] UserQueryModel model)
         {
             var queryDto = model.Adapt<UserQueryDto>();
-            queryDto.KeywordMappedColumnNames = new string[] { "Name", "DisplayName", "PhoneNumber" };
-
-            if (model.IsEnabled.HasValue)
-            {
-                queryDto.PreWhereBy = "IsEnabled=@IsEnabled";
-            }
-
-            if (model.RoleIds != null && model.RoleIds.Length > 0)
-            {
-                if(string.IsNullOrEmpty(queryDto.PreWhereBy) == false)
-                {
-                    queryDto.PreWhereBy += " AND ";
-                }
-
-                queryDto.PreWhereBy += "EXISTS(SELECT 1 FROM T_UserRole WHERE FK_UserId=V_UserAggregate.Id AND FK_RoleId IN @RoleIds)";
-            }
-
             var result = await _vUserAggregateRepository.QueryPagedAsync(queryDto);
             return PaginationQueryResult(result.Adapt<PaginationQueryResult<UserModel>>());
         }
