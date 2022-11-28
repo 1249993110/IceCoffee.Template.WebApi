@@ -4,8 +4,8 @@ GO
 --创建视图
 CREATE VIEW V_UserAggregate AS
 SELECT 
-      UserId AS Id
-      ,UserName AS Name
+      Id
+      ,Name
       ,CreatedDate
       ,DisplayName
       ,PhoneNumber
@@ -14,18 +14,7 @@ SELECT
       ,LastLoginIp
       ,Address
       ,Description
-      ,UserEnabled AS IsEnabled
-      ,STRING_AGG(CAST(RoleId AS VARCHAR(36)),',') AS Roles
-FROM V_User GROUP BY 
-      UserId
-      ,UserName
-      ,CreatedDate
-      ,DisplayName
-      ,PhoneNumber
-      ,Email
-      ,LastLoginTime
-      ,LastLoginIp
-      ,Address
-      ,Description
-      ,UserEnabled
+      ,IsEnabled
+      ,(SELECT STRING_AGG(CAST(FK_RoleId AS VARCHAR(36)),',') FROM T_UserRole WHERE FK_UserId = T_User.Id) AS Roles
+From T_User
 GO

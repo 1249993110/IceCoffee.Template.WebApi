@@ -3,7 +3,7 @@
     /// <summary>
     /// 
     /// </summary>
-    public class V_User
+    public class V_UserRole
     {
         /// <summary>
         /// 

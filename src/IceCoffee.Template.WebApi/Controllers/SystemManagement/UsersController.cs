@@ -148,7 +148,7 @@ namespace HYCX.Power.WebApi.Controllers.SystemManagement
                 return FailedResult($"修改失败, 用户名称: {model.Name} 已存在");
             }
 
-            count = await _userRepository.QueryRecordCountAsync("PhoneNumber=@PhoneNumber", new { model.PhoneNumber });
+            count = await _userRepository.QueryRecordCountAsync("PhoneNumber=@PhoneNumber AND Id!=@Id", new { model.PhoneNumber, model.Id });
             if (count != 0)
             {
                 return FailedResult($"修改失败, 电话号码: {model.PhoneNumber} 已存在");

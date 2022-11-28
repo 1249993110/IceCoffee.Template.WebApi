@@ -58,8 +58,8 @@ namespace IceCoffee.Template.WebApi.Utils
             user.LastLoginIp = httpContext.GetRemoteIpAddress();
             await userRepository.UpdateAsync(user);
 
-            var vUserRepository = httpContext.RequestServices.GetRequiredService<IVUserRepository>();
-            var roleNames = await vUserRepository.QueryEnabledRoleNamesByUserId(userId);
+            var vUserRoleRepository = httpContext.RequestServices.GetRequiredService<IVUserRoleRepository>();
+            var roleNames = await vUserRoleRepository.QueryEnabledRoleNamesByUserId(userId);
             if (roleNames.Any() == false)
             {
                 throw new Exception($"用户: {loginName} 尚未分配角色");

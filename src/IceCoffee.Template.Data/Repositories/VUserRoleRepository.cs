@@ -3,12 +3,12 @@ using IceCoffee.Template.Data.IRepositories;
 
 namespace IceCoffee.Template.Data.Repositories
 {
-    public class VUserRepository : SqlServerRepository<V_User>, IVUserRepository
+    public class VUserRoleRepository : SqlServerRepository<V_UserRole>, IVUserRoleRepository
     {
-        private const string sql1 = "SELECT RoleId FROM V_User WHERE UserId=@UserId AND RoleEnabled=1";
-        private const string sql2 = "SELECT RoleName FROM V_User WHERE UserId=@UserId AND RoleEnabled=1";
+        private const string sql1 = "SELECT RoleId FROM V_UserRole WHERE UserId=@UserId AND RoleEnabled=1";
+        private const string sql2 = "SELECT RoleName FROM V_UserRole WHERE UserId=@UserId AND RoleEnabled=1";
 
-        public VUserRepository(DefaultDbConnectionInfo dbConnectionInfo) : base(dbConnectionInfo)
+        public VUserRoleRepository(DefaultDbConnectionInfo dbConnectionInfo) : base(dbConnectionInfo)
         {
         }
 

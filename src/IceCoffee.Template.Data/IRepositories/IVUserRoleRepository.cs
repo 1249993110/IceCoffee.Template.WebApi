@@ -2,7 +2,7 @@
 
 namespace IceCoffee.Template.Data.IRepositories
 {
-    public interface IVUserRepository : IRepository<V_User>
+    public interface IVUserRoleRepository : IRepository<V_UserRole>
     {
         Task<IEnumerable<Guid>> QueryEnabledRoleIdsByUserId(Guid userId);
 
