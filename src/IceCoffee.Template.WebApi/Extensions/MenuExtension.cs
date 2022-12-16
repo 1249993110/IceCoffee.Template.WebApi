@@ -31,12 +31,12 @@ namespace IceCoffee.Template.WebApi.Extensions
         {
             var treenode = item.Adapt<MenuTreeModel>();
 
-            var subitems = menus.Where(p => p.ParentId == item.Id && p.Id != item.Id).OrderBy(m => m.Sort);
+            var subitems = menus.Where(p => p.ParentId == item.Id && p.Id != item.Id);
 
-            if (subitems != null && subitems.Any())
+            if (subitems.Any())
             {
                 treenode.Children = new List<MenuTreeModel>();
-                foreach (var subitem in subitems)
+                foreach (var subitem in subitems.OrderBy(m => m.Sort))
                 {
                     var submodule = ParseTreeNode(menus, subitem);
                     treenode.Children.Add(submodule);
@@ -71,14 +71,26 @@ namespace IceCoffee.Template.WebApi.Extensions
         /// <param name="item">当前菜单节点</param>
         private static MenuTreeModel ParseTreeNode(IEnumerable<V_RoleMenu> menus, V_RoleMenu item)
         {
-            var treenode = item.Adapt<MenuTreeModel>();
+            var treenode = new MenuTreeModel()
+            {
+                Id = item.MenuId.GetValueOrDefault(),
+                Name = item.MenuName,
+                ParentId = item.MenuParentId,
+                IsEnabled = item.MenuEnabled.GetValueOrDefault(),
+                Description = item.MenuDescription,
+                Icon = item.Icon,
+                IsExternalLink = item.IsExternalLink.GetValueOrDefault(),
+                Sort = item.Sort.GetValueOrDefault(),
+                Url = item.Url,
+                Children = null
+            };
 
-            var subitems = menus.Where(p => p.MenuParentId == item.MenuId && p.MenuId != item.MenuId).OrderBy(m => m.Sort);
+            var subitems = menus.Where(p => p.MenuParentId == item.MenuId && p.MenuId != item.MenuId);
 
-            if (subitems != null && subitems.Any())
+            if (subitems.Any())
             {
                 treenode.Children = new List<MenuTreeModel>();
-                foreach (var subitem in subitems)
+                foreach (var subitem in subitems.OrderBy(m => m.Sort))
                 {
                     var submodule = ParseTreeNode(menus, subitem);
                     treenode.Children.Add(submodule);
