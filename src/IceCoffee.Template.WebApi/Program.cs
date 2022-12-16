@@ -32,7 +32,7 @@ namespace IceCoffee.Template.WebApi
                 Directory.SetCurrentDirectory(AppContext.BaseDirectory);
 
                 TypeAdapterConfig.GlobalSettings.Compiler = exp => exp.CompileFast();
-                MapsterTypeAdapter.ConfigEntityToModel();
+                //MapsterTypeAdapter.ConfigEntityToModel();
 
                 var builder = WebApplication.CreateBuilder(args);
                 var hostBuilder = builder.Host;
